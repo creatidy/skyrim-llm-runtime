@@ -1,0 +1,14 @@
+[package]
+name = "runtime-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+chrono.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+runtime-core = { path = "../../crates/runtime-core" }
+provider-openai = { path = "../../crates/provider-openai" }
+transport-file = { path = "../../crates/transport-file" }

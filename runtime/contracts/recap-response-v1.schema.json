@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/skyrim-llm-runtime/recap-response-v1.schema.json",
+  "title": "RecapResponseV1",
+  "type": "object",
+  "required": ["contract_version", "request_id", "ok", "meta"],
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": { "type": "string", "const": "v1" },
+    "request_id": { "type": "string", "minLength": 1 },
+    "ok": { "type": "boolean" },
+    "recap": {
+      "type": ["object", "null"],
+      "required": ["summary", "next_steps", "spoiler_risk"],
+      "additionalProperties": false,
+      "properties": {
+        "summary": { "type": "string", "minLength": 1 },
+        "next_steps": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 5,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "spoiler_risk": {
+          "type": "string",
+          "enum": ["none", "low", "medium", "high"]
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "runtime_build_id",
+        "prompt_version",
+        "provider",
+        "cache",
+        "budgets",
+        "created_at_utc"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "runtime_build_id": { "type": "string", "minLength": 1 },
+        "prompt_version": { "type": "string", "minLength": 1 },
+        "provider": {
+          "type": "object",
+          "required": ["name", "model"],
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "model": { "type": "string", "minLength": 1 }
+          }
+        },
+        "cache": {
+          "type": "object",
+          "required": ["hit"],
+          "additionalProperties": false,
+          "properties": {
+            "hit": { "type": "boolean" },
+            "key": { "type": ["string", "null"] },
+            "age_seconds": { "type": ["integer", "null"], "minimum": 0 }
+          }
+        },
+        "budgets": {
+          "type": "object",
+          "required": ["tokens_in", "tokens_out"],
+          "additionalProperties": false,
+          "properties": {
+            "tokens_in": { "type": ["integer", "null"], "minimum": 0 },
+            "tokens_out": { "type": ["integer", "null"], "minimum": 0 }
+          }
+        },
+        "created_at_utc": { "type": "string", "format": "date-time" }
+      }
+    },
+    "error": {
+      "type": ["object", "null"],
+      "required": ["code", "message"],
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "runtime_offline",
+            "provider_error",
+            "budget_exceeded",
+            "validation_failed",
+            "transport_error"
+          ]
+        },
+        "message": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

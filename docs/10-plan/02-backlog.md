@@ -1,47 +1,65 @@
-# Backlog (starter)
+# Backlog
 
-This backlog is written as small, testable items. Expand as implementation begins.
+Backlog items are small and testable. Status markers:
+- `[x]` done in repo
+- `[~]` in progress / partial
+- `[ ]` not started
 
 ## Runtime
 
-- Implement config loader (Player/Developer modes).
-- Implement redaction rules (paths/usernames).
-- Implement OpenAI adapter:
-  - request building
-  - structured output validation
-  - timeout/retry policy
-- Implement caching:
-  - stable hash function
-  - cache metadata (hit/miss, age)
-- Implement replay bundles:
-  - bundle folder layout
-  - export toggle
-  - local replay command
-- Implement observability:
-  - structured logs
-  - minimal metrics output (JSON or /metrics)
+- `[x]` Implement config loader (Player/Developer modes).
+- `[x]` Implement redaction rules (paths/usernames/machine names baseline).
+- `[~]` Implement OpenAI adapter:
+  - `[x]` request building
+  - `[x]` structured output parsing + validation handoff
+  - `[x]` timeout/retry envelope (offline/mock path)
+  - `[ ]` live HTTP call path for real provider execution
+- `[x]` Implement caching:
+  - `[x]` stable hash function
+  - `[x]` cache metadata (hit/miss, age)
+- `[x]` Implement replay bundles:
+  - `[x]` bundle folder layout
+  - `[x]` export toggle
+  - `[x]` local replay command
+- `[x]` Implement observability baseline:
+  - `[x]` structured logs
+  - `[x]` minimal metrics output (`metrics.json`)
+
+## Contracts and interfaces
+
+- `[x]` Add versioned recap schemas (`v1`).
+- `[x]` Add aligned Rust request/response types.
+- `[x]` Add runtime interfaces: Transport/Provider/Safety/Cache/Replay.
+- `[x]` Add schema + roundtrip tests.
+
+## Simulator and tooling
+
+- `[x]` Add file bridge simulator workflow.
+- `[x]` Add `runtime-cli` commands for serve/simulate/replay/init-config.
+- `[~]` Add CI/lint/format stubs.
 
 ## Skyrim mod
 
-- Add on-demand trigger (hotkey or lesser power).
-- Minimal event log:
-  - timestamp
-  - cell/location name
-  - quest objective text when available
-  - optional user “bookmark note”
-- File bridge:
-  - write request file
-  - poll response file
-  - display result
-- Error UX:
-  - runtime offline
-  - provider error
-  - budget exceeded
-  - validation failed -> fallback recap
+- `[ ]` Add on-demand trigger (hotkey or lesser power).
+- `[ ]` Add minimal event log collector.
+- `[ ]` Add file-bridge write/poll/render loop in real mod.
+- `[ ]` Add error UX mapping in game:
+  - `[ ]` runtime offline
+  - `[ ]` provider error
+  - `[ ]` budget exceeded
+  - `[ ]` validation failed fallback
 
-## Tooling
+## Real integration (Iteration 3 gate)
 
-- Dev scripts:
-  - run runtime in dev mode
-  - replay a bundle
-  - format/lint/ci stubs
+- `[x]` Add real Skyrim validation protocol doc.
+- `[x]` Add issue template for external modpack findings.
+- `[ ]` Execute first VistulaRim smoke pass and capture findings.
+- `[ ]` Convert integration findings into stabilization tasks.
+
+## Next-up actionable tasks
+
+1. Implement live OpenAI HTTP adapter path behind existing `Provider` trait.
+2. Add runtime-offline timeout contract test from simulator client perspective.
+3. Add regression tests for forced provider failure and forced invalid output fallback.
+4. Perform first external real-Skyrim validation pass and log outcomes.
+5. Start P2 prep: grounded help data pipeline and chunk citation contract draft.
