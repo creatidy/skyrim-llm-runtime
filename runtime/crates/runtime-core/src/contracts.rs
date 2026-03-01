@@ -1,6 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
+// Request/response versions are part of the runtime public contract.
 pub const RECAP_REQUEST_VERSION: &str = "v1";
 pub const RECAP_RESPONSE_VERSION: &str = "v1";
 
@@ -17,6 +18,7 @@ pub struct RecapRequestV1 {
 
 impl RecapRequestV1 {
     pub fn validate_basic(&self) -> Result<(), String> {
+        // Fast preflight validation before any provider/caching work.
         if self.contract_version != RECAP_REQUEST_VERSION {
             return Err(format!(
                 "unsupported request contract version: {}",
@@ -82,6 +84,7 @@ pub struct RecapResponseV1 {
 }
 
 impl RecapResponseV1 {
+    // Helper constructor for successful runtime responses.
     pub fn success(request_id: &str, recap: RecapPayload, meta: ResponseMeta) -> Self {
         Self {
             contract_version: RECAP_RESPONSE_VERSION.to_string(),
@@ -93,6 +96,7 @@ impl RecapResponseV1 {
         }
     }
 
+    // Helper constructor for structured failures.
     pub fn failure(request_id: &str, code: RuntimeErrorCode, message: &str, meta: ResponseMeta) -> Self {
         Self {
             contract_version: RECAP_RESPONSE_VERSION.to_string(),
@@ -171,6 +175,7 @@ pub enum RuntimeErrorCode {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CandidateRecap {
+    // Provider output before safety validation/coercion.
     pub summary: String,
     pub next_steps: Vec<String>,
     pub provider_name: String,
@@ -180,6 +185,7 @@ pub struct CandidateRecap {
 }
 
 pub fn default_fallback_recap() -> RecapPayload {
+    // Safe fallback used when provider fails or candidate validation fails.
     RecapPayload {
         summary: "Unable to generate a fresh recap. Here is a safe fallback summary based on recent activity.".to_string(),
         next_steps: vec![

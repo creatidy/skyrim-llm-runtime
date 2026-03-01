@@ -5,6 +5,7 @@ use crate::{
 };
 use std::{path::PathBuf, time::Duration};
 
+// Envelope carries both decoded payload and file locations needed by file transport.
 #[derive(Debug, Clone)]
 pub struct TransportEnvelope {
     pub request_path: PathBuf,
@@ -23,7 +24,9 @@ pub enum TransportError {
 }
 
 pub trait Transport {
+    // Poll next request from an underlying transport (file bridge for PoC).
     fn pop_next_request(&mut self, wait_for: Duration) -> Result<Option<TransportEnvelope>, TransportError>;
+    // Persist response and perform transport-specific lifecycle operations.
     fn write_response(
         &mut self,
         envelope: &TransportEnvelope,
@@ -42,6 +45,7 @@ pub enum ProviderError {
 pub trait Provider {
     fn name(&self) -> &str;
     fn model(&self) -> &str;
+    // Generate a provider candidate that still needs safety/schema checks.
     fn generate_recap(
         &self,
         request: &RecapRequestV1,
@@ -50,7 +54,9 @@ pub trait Provider {
 }
 
 pub trait SafetyPipeline {
+    // Redact and trim request before it leaves local runtime boundary.
     fn sanitize_request(&self, request: &RecapRequestV1) -> RecapRequestV1;
+    // Validate and normalize provider output into final response payload.
     fn validate_candidate(
         &self,
         request: &RecapRequestV1,
@@ -60,6 +66,7 @@ pub trait SafetyPipeline {
 }
 
 pub trait CacheStore {
+    // Stable hash key from normalized request + prompt/model identity.
     fn stable_key_for(&self, request: &RecapRequestV1, prompt_version: &str, model: &str) -> String;
     fn get_fresh(&mut self, key: &str) -> anyhow::Result<Option<(CachedRecap, u64)>>;
     fn get_stale(&mut self, key: &str) -> anyhow::Result<Option<CachedRecap>>;
@@ -67,6 +74,7 @@ pub trait CacheStore {
 }
 
 pub trait ReplayStore {
+    // Export deterministic artifact bundle for debugging/regression replay.
     fn export_bundle(
         &self,
         request: &RecapRequestV1,

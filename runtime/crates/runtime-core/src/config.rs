@@ -58,6 +58,7 @@ pub struct ObservabilityConfig {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RuntimeConfig {
+    // Central runtime configuration loaded from JSON.
     pub mode: RuntimeMode,
     pub runtime_build_id: String,
     pub prompt_version: String,
@@ -78,6 +79,7 @@ impl RuntimeConfig {
     }
 
     pub fn default_for_dev() -> Self {
+        // Developer defaults favor debuggability: mock provider + replay export on.
         Self {
             mode: RuntimeMode::Developer,
             runtime_build_id: "dev-build".to_string(),

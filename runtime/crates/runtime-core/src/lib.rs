@@ -1,3 +1,5 @@
+// runtime-core is the provider-agnostic runtime domain layer:
+// contracts, policies, orchestration, and operational helpers.
 pub mod cache;
 pub mod config;
 pub mod contracts;

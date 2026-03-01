@@ -20,6 +20,7 @@ use transport_file::FileTransport;
 use uuid::Uuid;
 
 fn main() -> anyhow::Result<()> {
+    // Lightweight manual CLI parsing keeps dependencies minimal for PoC.
     let args = env::args().skip(1).collect::<Vec<_>>();
     if args.is_empty() {
         print_usage();
@@ -55,6 +56,7 @@ fn cmd_serve(args: &[String]) -> anyhow::Result<()> {
     let replay = FileReplayStore::new(&config.replay.directory)?;
     let logger = StructuredLogger::new(&config.observability.log_file);
 
+    // Compose the runtime pipeline from swappable components.
     let mut service = RecapService {
         config: config.clone(),
         provider,
@@ -68,6 +70,7 @@ fn cmd_serve(args: &[String]) -> anyhow::Result<()> {
     let mut file_transport =
         FileTransport::new(&config.bridge.requests_dir, &config.bridge.responses_dir)?;
 
+    // Main worker loop: poll for request files, process, emit response files.
     loop {
         let maybe = file_transport
             .pop_next_request(Duration::from_secs(2))
@@ -104,6 +107,7 @@ fn cmd_serve(args: &[String]) -> anyhow::Result<()> {
 }
 
 fn cmd_replay(args: &[String]) -> anyhow::Result<()> {
+    // Replay reads an exported bundle and prints a quick human-readable summary.
     let bundle = get_option(args, "--bundle").ok_or_else(|| anyhow!("missing --bundle <path>"))?;
     let summary = FileReplayStore::replay_bundle_summary(bundle)?;
     println!("{summary}");
@@ -121,6 +125,7 @@ fn cmd_simulate(args: &[String]) -> anyhow::Result<()> {
         _ => SpoilerMode::Safe,
     };
 
+    // Simulator acts like a Skyrim client by writing request JSON to the bridge.
     let request = build_sample_request(spoiler_mode);
     let transport = FileTransport::new(&config.bridge.requests_dir, &config.bridge.responses_dir)?;
     transport
@@ -160,6 +165,7 @@ fn cmd_init_config(args: &[String]) -> anyhow::Result<()> {
 }
 
 fn build_sample_request(spoiler_mode: SpoilerMode) -> RecapRequestV1 {
+    // Minimal synthetic payload used for local, Skyrim-free E2E checks.
     RecapRequestV1 {
         contract_version: RECAP_REQUEST_VERSION.to_string(),
         request_id: Uuid::new_v4().to_string(),
@@ -199,6 +205,7 @@ fn load_config(path: Option<&str>) -> anyhow::Result<RuntimeConfig> {
 }
 
 fn ensure_runtime_paths(config: &RuntimeConfig) -> anyhow::Result<()> {
+    // Ensure directories exist before polling/writing to avoid noisy runtime failures.
     fs::create_dir_all(&config.bridge.base_dir)?;
     fs::create_dir_all(&config.bridge.requests_dir)?;
     fs::create_dir_all(&config.bridge.responses_dir)?;

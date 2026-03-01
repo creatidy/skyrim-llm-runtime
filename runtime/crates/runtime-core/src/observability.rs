@@ -5,6 +5,7 @@ use std::{fs, path::PathBuf};
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Metrics {
+    // Keep metrics minimal and directly tied to acceptance/debug goals.
     pub request_count: u64,
     pub cache_hits: u64,
     pub cache_misses: u64,
@@ -50,6 +51,7 @@ impl StructuredLogger {
         request_id: &str,
         extra: serde_json::Value,
     ) -> anyhow::Result<()> {
+        // Append JSON-lines to keep logs both human-readable and machine-parseable.
         let line = serde_json::to_string(&json!({
             "ts": Utc::now(),
             "level": level,

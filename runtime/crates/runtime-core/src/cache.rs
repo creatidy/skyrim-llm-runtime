@@ -22,6 +22,7 @@ pub struct CacheEntry {
 
 #[derive(Debug, Clone)]
 pub struct FileCacheStore {
+    // JSON-on-disk cache keeps PoC transparent and easy to inspect manually.
     directory: PathBuf,
     ttl_seconds: u64,
 }
@@ -54,6 +55,7 @@ impl FileCacheStore {
 
 impl CacheStore for FileCacheStore {
     fn stable_key_for(&self, request: &RecapRequestV1, prompt_version: &str, model: &str) -> String {
+        // Hash only stable semantic inputs; exclude volatile fields like request_id.
         let stable_payload = serde_json::json!({
             "contract_version": &request.contract_version,
             "feature": &request.feature,
@@ -77,9 +79,7 @@ impl CacheStore for FileCacheStore {
             return Ok(None);
         };
 
-        let age = (Utc::now() - entry.created_at_utc)
-            .num_seconds()
-            .max(0) as u64;
+        let age = (Utc::now() - entry.created_at_utc).num_seconds().max(0) as u64;
         if age > self.ttl_seconds {
             return Ok(None);
         }

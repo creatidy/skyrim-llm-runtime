@@ -5,6 +5,7 @@ use crate::traits::SafetyPipeline;
 
 #[derive(Debug, Clone)]
 pub struct DefaultSafetyPipeline {
+    // Hard caps keep requests/outputs bounded and UI-friendly.
     redaction_enabled: bool,
     max_events: usize,
     max_chars_per_event: usize,
@@ -28,6 +29,7 @@ impl DefaultSafetyPipeline {
             return s.to_string();
         }
 
+        // PoC redaction patterns; keep simple and deterministic.
         let mut out = s.replace("C:\\\\Users\\\\", "<redacted-user-path>\\");
         out = out.replace("/home/", "<redacted-home>/");
         out = out.replace("\\\\", "\\");
@@ -46,6 +48,7 @@ impl DefaultSafetyPipeline {
     }
 
     fn scrub_spoilers(&self, text: &str) -> String {
+        // Very simple spoiler scrubber for PoC safe mode.
         let mut out = text.to_string();
         for token in ["Alduin", "Sovngarde", "Dragonborn"] {
             out = out.replace(token, "[spoiler-redacted]");
@@ -58,6 +61,7 @@ impl SafetyPipeline for DefaultSafetyPipeline {
     fn sanitize_request(&self, request: &RecapRequestV1) -> RecapRequestV1 {
         let mut cloned = request.clone();
 
+        // Keep only recent tail to cap payload size.
         if cloned.game_context.event_log.len() > self.max_events {
             let start = cloned.game_context.event_log.len() - self.max_events;
             cloned.game_context.event_log = cloned.game_context.event_log.split_off(start);
@@ -79,6 +83,7 @@ impl SafetyPipeline for DefaultSafetyPipeline {
         request: &RecapRequestV1,
         candidate: CandidateRecap,
     ) -> Result<RecapPayload, String> {
+        // Validate presence and length of summary.
         let mut summary = candidate.summary.trim().to_string();
         if summary.is_empty() {
             return Err("summary is empty".to_string());
@@ -87,6 +92,7 @@ impl SafetyPipeline for DefaultSafetyPipeline {
             summary = summary.chars().take(self.max_summary_chars).collect();
         }
 
+        // Normalize and bound next-step list for in-game UI.
         let mut next_steps = candidate
             .next_steps
             .into_iter()
@@ -110,6 +116,7 @@ impl SafetyPipeline for DefaultSafetyPipeline {
 
         let spoiler_risk = match request.spoiler_mode {
             SpoilerMode::Safe => {
+                // In safe mode, scrub known spoiler tokens from output text.
                 summary = self.scrub_spoilers(&summary);
                 next_steps = next_steps
                     .into_iter()

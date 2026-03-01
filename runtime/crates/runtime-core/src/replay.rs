@@ -6,6 +6,7 @@ use std::{fs, path::PathBuf};
 
 #[derive(Debug, Clone)]
 pub struct FileReplayStore {
+    // Root directory where one folder per request_id is exported.
     pub directory: PathBuf,
 }
 
@@ -17,6 +18,7 @@ impl FileReplayStore {
     }
 
     pub fn replay_bundle_summary(bundle_dir: impl Into<PathBuf>) -> anyhow::Result<String> {
+        // Small helper used by CLI replay command for quick inspection.
         let dir = bundle_dir.into();
         let request = fs::read_to_string(dir.join("request.json"))?;
         let response = fs::read_to_string(dir.join("response.json"))?;
@@ -43,6 +45,7 @@ impl ReplayStore for FileReplayStore {
         response: &RecapResponseV1,
         redaction_report: Option<&str>,
     ) -> anyhow::Result<()> {
+        // Deterministic layout makes bug reports and regression reruns reproducible.
         let bundle_dir = self.directory.join(&request.request_id);
         fs::create_dir_all(&bundle_dir)?;
 

@@ -16,6 +16,7 @@ where
     S: SafetyPipeline,
     R: ReplayStore,
 {
+    // Concrete dependencies are generic traits to keep provider/transport replaceable.
     pub config: RuntimeConfig,
     pub provider: P,
     pub cache: C,
@@ -35,6 +36,7 @@ where
     pub fn process_request(&mut self, request: RecapRequestV1) -> RecapResponseV1 {
         self.metrics.request_count += 1;
 
+        // 1) Contract sanity checks. Fail fast on invalid requests.
         if let Err(err) = request.validate_basic() {
             self.metrics.validation_failures += 1;
             return self.failure_response(
@@ -48,11 +50,13 @@ where
             );
         }
 
+        // 2) Normalize/redact before hashing/calling provider.
         let sanitized = self.safety.sanitize_request(&request);
         let cache_key = self
             .cache
             .stable_key_for(&sanitized, &self.config.prompt_version, self.provider.model());
 
+        // 3) Fast path: return fresh cache hit when available.
         if self.config.caching.enabled {
             match self.cache.get_fresh(&cache_key) {
                 Ok(Some((cached, age_seconds))) => {
@@ -83,6 +87,7 @@ where
             }
         }
 
+        // 4) Local budget guard before external provider work.
         let token_estimate = estimate_tokens_from_request(&sanitized);
         if token_estimate > self.config.budgets.max_tokens_per_call {
             return self.failure_response(
@@ -96,6 +101,7 @@ where
             );
         }
 
+        // 5) Provider call with stale-cache/fallback handling.
         let candidate = match self.provider.generate_recap(&sanitized, &self.config) {
             Ok(candidate) => candidate,
             Err(err) => {
@@ -139,6 +145,7 @@ where
             }
         };
 
+        // 6) Enforce output constraints and spoiler policy.
         let recap_payload = match self.safety.validate_candidate(&sanitized, candidate.clone()) {
             Ok(payload) => payload,
             Err(err) => {
@@ -182,6 +189,7 @@ where
             }
         };
 
+        // 7) Persist successful output in cache and optionally replay bundle.
         let cached = CachedRecap {
             recap: recap_payload,
             provider: ProviderMeta {
@@ -271,6 +279,7 @@ where
 }
 
 fn estimate_tokens_from_request(request: &RecapRequestV1) -> u32 {
+    // Cheap approximation good enough for PoC budget checks.
     let mut chars = request.game_context.player_location.chars().count() as u32;
     for event in &request.game_context.event_log {
         chars += event.text.chars().count() as u32;

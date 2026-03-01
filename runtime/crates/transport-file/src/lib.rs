@@ -7,6 +7,7 @@ use std::time::{Duration, Instant};
 
 #[derive(Debug, Clone)]
 pub struct FileTransport {
+    // Producer writes requests_dir; runtime writes responses_dir.
     requests_dir: PathBuf,
     responses_dir: PathBuf,
 }
@@ -26,6 +27,7 @@ impl FileTransport {
     }
 
     pub fn write_request_file(&self, request: &RecapRequestV1) -> Result<PathBuf, TransportError> {
+        // Client-side helper used by simulator/tests to mimic Skyrim output.
         let path = self
             .requests_dir
             .join(format!("{}.json", request.request_id));
@@ -40,6 +42,7 @@ impl FileTransport {
         request_id: &str,
         timeout: Duration,
     ) -> Result<Option<RecapResponseV1>, TransportError> {
+        // Polling approach is explicit for PoC simplicity and cross-platform behavior.
         let path = self.responses_dir.join(format!("{}.json", request_id));
         let start = Instant::now();
 
@@ -57,6 +60,7 @@ impl FileTransport {
     }
 
     fn next_request_path(&self) -> Result<Option<PathBuf>, TransportError> {
+        // Deterministic order avoids starvation when multiple requests exist.
         let mut files = fs::read_dir(&self.requests_dir)
             .map_err(|e| TransportError::Io(format!("read requests dir: {e}")))?
             .filter_map(Result::ok)
@@ -100,6 +104,7 @@ impl Transport for FileTransport {
         envelope: &TransportEnvelope,
         response: &RecapResponseV1,
     ) -> Result<(), TransportError> {
+        // Write temp + rename gives atomic visible handoff for consumers.
         let temp_path = envelope.response_path.with_extension("tmp");
         let body = serde_json::to_string_pretty(response)
             .map_err(|e| TransportError::Encode(format!("encode response: {e}")))?;

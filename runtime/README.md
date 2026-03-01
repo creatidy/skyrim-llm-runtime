@@ -68,3 +68,11 @@ cargo test
 ```
 
 If the local environment has no Rust toolchain, install `cargo` first, then rerun tests.
+
+## Devcontainer
+
+From repo root, open this project in a Dev Container to get a preconfigured Rust environment.
+
+- Config: `.devcontainer/devcontainer.json`
+- Bootstrap script: `.devcontainer/post-create.sh`
+- Contributor guide: `docs/30-runtime/05-devcontainer.md`

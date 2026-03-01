@@ -22,3 +22,9 @@ Developer mode:
 - replay export enabled
 - more detailed logs (still redacted by default)
 - evaluation runner available
+
+## Environment setup
+
+Use the repository `.devcontainer` setup for a reproducible Rust toolchain:
+
+- `docs/30-runtime/05-devcontainer.md`

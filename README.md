@@ -35,3 +35,9 @@ The PoC proves the full loop is possible:
 Start at:
 - `docs/10-plan/00-poc-definition.md`
 - `docs/10-plan/01-poc-roadmap.md`
+
+## Development environment
+
+This repo includes a root `.devcontainer` for consistent Rust setup and testing.
+
+- Setup and usage: `docs/30-runtime/05-devcontainer.md`

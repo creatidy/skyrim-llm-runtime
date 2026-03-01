@@ -18,6 +18,7 @@ impl OpenAiProvider {
     }
 
     fn build_prompt(request: &RecapRequestV1) -> String {
+        // Prompt stays intentionally small/structured to fit recap contract.
         let events = request
             .game_context
             .event_log
@@ -33,6 +34,7 @@ impl OpenAiProvider {
     }
 
     fn generate_mock_json(request: &RecapRequestV1) -> Result<String, ProviderError> {
+        // Test hooks to exercise provider-failure and invalid-output branches.
         if request
             .game_context
             .event_log
@@ -81,6 +83,7 @@ impl OpenAiProvider {
         raw: &str,
         estimated_tokens_in: u32,
     ) -> Result<CandidateRecap, ProviderError> {
+        // Parse into strict shape before safety pipeline enforces final constraints.
         #[derive(Deserialize)]
         struct StructuredRecap {
             summary: String,
@@ -124,6 +127,7 @@ impl Provider for OpenAiProvider {
 
         let mut last_err: Option<ProviderError> = None;
         for attempt in 0..=config.openai.max_retries {
+            // PoC currently uses an offline mock path; real HTTP adapter is a follow-up task.
             let raw = if config.openai.mock_mode || config.openai.api_key.is_none() {
                 Self::generate_mock_json(request)
             } else {
