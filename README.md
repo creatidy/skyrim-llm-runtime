@@ -20,8 +20,8 @@ The PoC proves the full loop is possible:
 - `docs/20-architecture/` - contracts and key architectural choices (transport, replay bundles, safety pipeline).
 - `docs/30-runtime/` - runtime responsibilities, interfaces, and operational discipline.
 - `docs/40-skyrim-mod/` - Skyrim-side integration notes (thin client posture, file bridge, minimal UI).
-- `runtime/` - placeholder for the runtime implementation.
-- `mod/` - placeholder for the Skyrim mod implementation.
+- `runtime/` - Rust workspace implementation (contracts, file transport, runtime CLI, safety/cache/replay).
+- `mod/` - Skyrim mod integration placeholder and thin-client contract notes.
 
 ## Fundamentals to keep true
 
@@ -35,3 +35,9 @@ The PoC proves the full loop is possible:
 Start at:
 - `docs/10-plan/00-poc-definition.md`
 - `docs/10-plan/01-poc-roadmap.md`
+
+## Development environment
+
+This repo includes a root `.devcontainer` for consistent Rust setup and testing.
+
+- Setup and usage: `docs/30-runtime/05-devcontainer.md`

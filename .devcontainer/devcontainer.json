@@ -1,0 +1,30 @@
+{
+  "name": "skyrim-llm-runtime-rust",
+  "image": "mcr.microsoft.com/devcontainers/rust:1-1-bookworm",
+  "mounts": [
+    "source=codex-home,target=/home/vscode/.codex,type=volume",
+    "source=rust-cache,target=/home/vscode/.cargo,type=volume",
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached"
+  ],
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:/home/vscode/.codex/bin:/home/vscode/.local/bin"
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "vadimcn.vscode-lldb",
+        "tamasfe.even-better-toml",
+        "fill-labs.dependi",
+        "twxs.cmake",
+        "openai.chatgpt",
+        "yzhang.markdown-all-in-one"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "rust-analyzer.check.command": "clippy"
+      }
+    }
+  }
+}

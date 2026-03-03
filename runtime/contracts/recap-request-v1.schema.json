@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/skyrim-llm-runtime/recap-request-v1.schema.json",
+  "title": "RecapRequestV1",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "request_id",
+    "feature",
+    "created_at_utc",
+    "spoiler_mode",
+    "game_context",
+    "client"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": { "type": "string", "const": "v1" },
+    "request_id": { "type": "string", "minLength": 1 },
+    "feature": { "type": "string", "const": "recap" },
+    "created_at_utc": { "type": "string", "format": "date-time" },
+    "spoiler_mode": { "type": "string", "enum": ["safe", "full"] },
+    "game_context": {
+      "type": "object",
+      "required": ["player_location", "event_log"],
+      "additionalProperties": false,
+      "properties": {
+        "game_time": { "type": ["string", "null"] },
+        "player_location": { "type": "string", "minLength": 1 },
+        "event_log": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["t", "kind", "text"],
+            "additionalProperties": false,
+            "properties": {
+              "t": { "type": "string" },
+              "kind": { "type": "string" },
+              "text": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "client": {
+      "type": "object",
+      "required": ["client_kind", "client_version", "profile"],
+      "additionalProperties": false,
+      "properties": {
+        "client_kind": { "type": "string", "const": "skyrim-mod" },
+        "client_version": { "type": "string", "minLength": 1 },
+        "profile": { "type": "string", "enum": ["player", "developer"] }
+      }
+    }
+  }
+}

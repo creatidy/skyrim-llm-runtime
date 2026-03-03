@@ -1,0 +1,16 @@
+[package]
+name = "transport-file"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+runtime-core = { path = "../runtime-core" }
+
+[dev-dependencies]
+chrono.workspace = true
+tempfile.workspace = true
+provider-openai = { path = "../provider-openai" }

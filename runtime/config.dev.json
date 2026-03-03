@@ -1,0 +1,39 @@
+{
+  "mode": "developer",
+  "runtime_build_id": "dev-build",
+  "prompt_version": "recap-v1",
+  "openai": {
+    "api_key": null,
+    "model": "gpt-4.1-mini",
+    "timeout_ms": 20000,
+    "max_retries": 2,
+    "mock_mode": true
+  },
+  "budgets": {
+    "max_calls_per_hour": 120,
+    "max_tokens_per_call": 1200,
+    "daily_spend_cap_usd": 2.0
+  },
+  "caching": {
+    "enabled": true,
+    "ttl_seconds": 3600,
+    "directory": ".cache"
+  },
+  "privacy": {
+    "redaction_enabled": true,
+    "retention_policy": "minimal"
+  },
+  "replay": {
+    "export_enabled": true,
+    "directory": "replay-bundles"
+  },
+  "bridge": {
+    "base_dir": "bridge",
+    "requests_dir": "bridge/requests",
+    "responses_dir": "bridge/responses"
+  },
+  "observability": {
+    "log_file": "runtime.log",
+    "metrics_file": "metrics.json"
+  }
+}

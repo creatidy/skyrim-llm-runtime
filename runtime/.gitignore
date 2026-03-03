@@ -1,0 +1,12 @@
+/target
+/.cache
+/runtime.log
+/metrics.json
+/replay-bundles/*
+!/replay-bundles/.gitkeep
+/bridge/requests/*
+!/bridge/requests/.gitkeep
+/bridge/responses/*
+!/bridge/responses/.gitkeep
+/bridge/logs/*
+!/bridge/logs/.gitkeep
