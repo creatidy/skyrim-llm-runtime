@@ -97,7 +97,12 @@ impl RecapResponseV1 {
     }
 
     // Helper constructor for structured failures.
-    pub fn failure(request_id: &str, code: RuntimeErrorCode, message: &str, meta: ResponseMeta) -> Self {
+    pub fn failure(
+        request_id: &str,
+        code: RuntimeErrorCode,
+        message: &str,
+        meta: ResponseMeta,
+    ) -> Self {
         Self {
             contract_version: RECAP_RESPONSE_VERSION.to_string(),
             request_id: request_id.to_string(),

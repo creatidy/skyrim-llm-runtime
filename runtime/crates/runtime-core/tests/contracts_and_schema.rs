@@ -84,10 +84,9 @@ fn request_schema_validation_and_versioning() {
     let req = sample_request();
     let req_value = serde_json::to_value(&req).expect("value");
 
-    let schema_body = fs::read_to_string(
-        workspace_root().join("contracts/recap-request-v1.schema.json"),
-    )
-        .expect("load request schema");
+    let schema_body =
+        fs::read_to_string(workspace_root().join("contracts/recap-request-v1.schema.json"))
+            .expect("load request schema");
     let schema_json: Value = serde_json::from_str(&schema_body).expect("schema json");
     let compiled = JSONSchema::compile(&schema_json).expect("compile schema");
 
@@ -129,10 +128,9 @@ fn response_schema_validation() {
     );
 
     let value = serde_json::to_value(resp).expect("to value");
-    let schema_body = fs::read_to_string(
-        workspace_root().join("contracts/recap-response-v1.schema.json"),
-    )
-        .expect("load response schema");
+    let schema_body =
+        fs::read_to_string(workspace_root().join("contracts/recap-response-v1.schema.json"))
+            .expect("load response schema");
     let schema_json: Value = serde_json::from_str(&schema_body).expect("schema json");
     let compiled = JSONSchema::compile(&schema_json).expect("compile schema");
     assert!(compiled.validate(&value).is_ok());

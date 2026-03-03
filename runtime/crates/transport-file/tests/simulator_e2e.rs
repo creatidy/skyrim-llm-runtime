@@ -36,7 +36,8 @@ fn simulator_loop_produces_response_and_replay() {
     cfg.openai.mock_mode = true;
 
     let provider = OpenAiProvider::new(cfg.openai.model.clone());
-    let cache = FileCacheStore::new(&cfg.caching.directory, cfg.caching.ttl_seconds).expect("cache");
+    let cache =
+        FileCacheStore::new(&cfg.caching.directory, cfg.caching.ttl_seconds).expect("cache");
     let safety = DefaultSafetyPipeline::new(true);
     let replay = FileReplayStore::new(&cfg.replay.directory).expect("replay");
     let logger = StructuredLogger::new(&cfg.observability.log_file);
@@ -51,8 +52,9 @@ fn simulator_loop_produces_response_and_replay() {
         logger,
     };
 
-    let mut server_transport = FileTransport::new(&cfg.bridge.requests_dir, &cfg.bridge.responses_dir)
-        .expect("server transport");
+    let mut server_transport =
+        FileTransport::new(&cfg.bridge.requests_dir, &cfg.bridge.responses_dir)
+            .expect("server transport");
     let client_transport = FileTransport::new(&cfg.bridge.requests_dir, &cfg.bridge.responses_dir)
         .expect("client transport");
 
@@ -78,13 +80,15 @@ fn simulator_loop_produces_response_and_replay() {
         },
     };
 
-    client_transport.write_request_file(&req).expect("write req");
+    client_transport
+        .write_request_file(&req)
+        .expect("write req");
 
     let envelope = server_transport
         .pop_next_request(Duration::from_secs(2))
         .expect("pop req")
         .expect("some req");
-    let response = service.process_request(envelope.request);
+    let response = service.process_request(envelope.request.clone());
     server_transport
         .write_response(&envelope, &response)
         .expect("write response");

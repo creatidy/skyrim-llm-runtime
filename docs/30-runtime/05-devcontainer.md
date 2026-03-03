@@ -29,10 +29,13 @@ Bootstrap script:
 
 ```bash
 cd runtime
+cargo check
 cargo test
 cargo fmt --all -- --check
 cargo clippy --workspace --all-targets -- -D warnings
 ```
+
+If `cargo fmt --check` fails, run `cargo fmt --all` and rerun the check.
 
 ## Simulator test loop (inside container)
 
@@ -56,3 +59,11 @@ cargo run -p runtime-cli -- simulate --config config.dev.json --spoiler-mode saf
 - Bridge files are under `runtime/bridge/`.
 - Replay bundles are under `runtime/replay-bundles/`.
 - Metrics/logs are `runtime/metrics.json` and `runtime/runtime.log`.
+- Codex state is persisted via Docker volume at `/home/vscode/.codex`, so Codex auth/config/skills survive container rebuilds.
+
+## Scenario checks
+
+- Runtime offline: run `simulate` without `serve`; expect timeout.
+- Cache behavior: run `simulate` twice with `serve` running; second request should log `cache_hit=true`.
+- Budget guard: set `budgets.max_tokens_per_call` very low and ensure cache miss (or disable cache), then run `serve` + `simulate`; expect `BudgetExceeded`.
+- Fallback hooks: for manual request files in `runtime/bridge/requests/`, use `contract_version: "v1"` and include `[force_provider_error]` or `[force_invalid]` in event text to exercise fallback paths.

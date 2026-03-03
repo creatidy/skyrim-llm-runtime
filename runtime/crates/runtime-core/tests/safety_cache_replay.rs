@@ -1,7 +1,7 @@
 use runtime_core::cache::{CachedRecap, FileCacheStore};
 use runtime_core::contracts::{
-    BudgetsMeta, ClientInfo, ClientProfile, EventEntryV1, GameContext, ProviderMeta, RecapRequestV1,
-    SpoilerMode, RECAP_REQUEST_VERSION,
+    BudgetsMeta, ClientInfo, ClientProfile, EventEntryV1, GameContext, ProviderMeta,
+    RecapRequestV1, SpoilerMode, RECAP_REQUEST_VERSION,
 };
 use runtime_core::replay::FileReplayStore;
 use runtime_core::safety::DefaultSafetyPipeline;
@@ -57,7 +57,10 @@ fn safety_redacts_and_enforces_output_constraints() {
         )
         .expect("payload");
 
-    assert!(payload.summary.contains("[spoiler-redacted]") || payload.spoiler_risk == runtime_core::contracts::SpoilerRisk::None);
+    assert!(
+        payload.summary.contains("[spoiler-redacted]")
+            || payload.spoiler_risk == runtime_core::contracts::SpoilerRisk::None
+    );
     assert_eq!(payload.next_steps.len(), 3);
 }
 

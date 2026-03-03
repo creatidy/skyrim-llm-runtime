@@ -54,7 +54,12 @@ impl FileCacheStore {
 }
 
 impl CacheStore for FileCacheStore {
-    fn stable_key_for(&self, request: &RecapRequestV1, prompt_version: &str, model: &str) -> String {
+    fn stable_key_for(
+        &self,
+        request: &RecapRequestV1,
+        prompt_version: &str,
+        model: &str,
+    ) -> String {
         // Hash only stable semantic inputs; exclude volatile fields like request_id.
         let stable_payload = serde_json::json!({
             "contract_version": &request.contract_version,

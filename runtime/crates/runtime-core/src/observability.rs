@@ -36,11 +36,21 @@ impl StructuredLogger {
         Self { path: path.into() }
     }
 
-    pub fn info(&self, event: &str, request_id: &str, extra: serde_json::Value) -> anyhow::Result<()> {
+    pub fn info(
+        &self,
+        event: &str,
+        request_id: &str,
+        extra: serde_json::Value,
+    ) -> anyhow::Result<()> {
         self.write("info", event, request_id, extra)
     }
 
-    pub fn error(&self, event: &str, request_id: &str, extra: serde_json::Value) -> anyhow::Result<()> {
+    pub fn error(
+        &self,
+        event: &str,
+        request_id: &str,
+        extra: serde_json::Value,
+    ) -> anyhow::Result<()> {
         self.write("error", event, request_id, extra)
     }
 

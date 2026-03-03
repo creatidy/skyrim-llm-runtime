@@ -13,7 +13,10 @@ pub struct FileTransport {
 }
 
 impl FileTransport {
-    pub fn new(requests_dir: impl Into<PathBuf>, responses_dir: impl Into<PathBuf>) -> Result<Self, TransportError> {
+    pub fn new(
+        requests_dir: impl Into<PathBuf>,
+        responses_dir: impl Into<PathBuf>,
+    ) -> Result<Self, TransportError> {
         let requests_dir = requests_dir.into();
         let responses_dir = responses_dir.into();
         fs::create_dir_all(&requests_dir)
@@ -43,12 +46,13 @@ impl FileTransport {
         timeout: Duration,
     ) -> Result<Option<RecapResponseV1>, TransportError> {
         // Polling approach is explicit for PoC simplicity and cross-platform behavior.
-        let path = self.responses_dir.join(format!("{}.json", request_id));
+        let path = self.responses_dir.join(format!("{request_id}.json"));
         let start = Instant::now();
 
         while start.elapsed() < timeout {
             if path.exists() {
-                let body = fs::read_to_string(&path).map_err(|e| TransportError::Io(e.to_string()))?;
+                let body =
+                    fs::read_to_string(&path).map_err(|e| TransportError::Io(e.to_string()))?;
                 let response = serde_json::from_str::<RecapResponseV1>(&body)
                     .map_err(|e| TransportError::Decode(e.to_string()))?;
                 return Ok(Some(response));
@@ -74,7 +78,10 @@ impl FileTransport {
 }
 
 impl Transport for FileTransport {
-    fn pop_next_request(&mut self, wait_for: Duration) -> Result<Option<TransportEnvelope>, TransportError> {
+    fn pop_next_request(
+        &mut self,
+        wait_for: Duration,
+    ) -> Result<Option<TransportEnvelope>, TransportError> {
         let start = Instant::now();
         while start.elapsed() < wait_for {
             if let Some(request_path) = self.next_request_path()? {
@@ -82,11 +89,11 @@ impl Transport for FileTransport {
                     .map_err(|e| TransportError::Io(format!("read request file: {e}")))?;
                 let request = serde_json::from_str::<RecapRequestV1>(&body)
                     .map_err(|e| TransportError::Decode(format!("decode request: {e}")))?;
-                let response_path = self
-                    .responses_dir
-                    .join(request_path.file_name().ok_or_else(|| {
-                        TransportError::Io("request file has no file_name".to_string())
-                    })?);
+                let response_path =
+                    self.responses_dir
+                        .join(request_path.file_name().ok_or_else(|| {
+                            TransportError::Io("request file has no file_name".to_string())
+                        })?);
                 return Ok(Some(TransportEnvelope {
                     request_path,
                     response_path,

@@ -30,7 +30,8 @@ impl DefaultSafetyPipeline {
         }
 
         // PoC redaction patterns; keep simple and deterministic.
-        let mut out = s.replace("C:\\\\Users\\\\", "<redacted-user-path>\\");
+        let mut out = s.replace("C:\\Users\\", "<redacted-user-path>\\");
+        out = out.replace("C:\\\\Users\\\\", "<redacted-user-path>\\");
         out = out.replace("/home/", "<redacted-home>/");
         out = out.replace("\\\\", "\\");
 
@@ -67,11 +68,15 @@ impl SafetyPipeline for DefaultSafetyPipeline {
             cloned.game_context.event_log = cloned.game_context.event_log.split_off(start);
         }
 
-        cloned.game_context.player_location = self.redact_text(&cloned.game_context.player_location);
+        cloned.game_context.player_location =
+            self.redact_text(&cloned.game_context.player_location);
 
         for event in &mut cloned.game_context.event_log {
             let text = self.redact_text(&event.text);
-            let clipped = text.chars().take(self.max_chars_per_event).collect::<String>();
+            let clipped = text
+                .chars()
+                .take(self.max_chars_per_event)
+                .collect::<String>();
             event.text = clipped;
         }
 

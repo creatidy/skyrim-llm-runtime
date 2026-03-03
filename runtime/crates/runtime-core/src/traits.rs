@@ -25,7 +25,10 @@ pub enum TransportError {
 
 pub trait Transport {
     // Poll next request from an underlying transport (file bridge for PoC).
-    fn pop_next_request(&mut self, wait_for: Duration) -> Result<Option<TransportEnvelope>, TransportError>;
+    fn pop_next_request(
+        &mut self,
+        wait_for: Duration,
+    ) -> Result<Option<TransportEnvelope>, TransportError>;
     // Persist response and perform transport-specific lifecycle operations.
     fn write_response(
         &mut self,
@@ -67,7 +70,8 @@ pub trait SafetyPipeline {
 
 pub trait CacheStore {
     // Stable hash key from normalized request + prompt/model identity.
-    fn stable_key_for(&self, request: &RecapRequestV1, prompt_version: &str, model: &str) -> String;
+    fn stable_key_for(&self, request: &RecapRequestV1, prompt_version: &str, model: &str)
+        -> String;
     fn get_fresh(&mut self, key: &str) -> anyhow::Result<Option<(CachedRecap, u64)>>;
     fn get_stale(&mut self, key: &str) -> anyhow::Result<Option<CachedRecap>>;
     fn set(&mut self, key: &str, value: &CachedRecap) -> anyhow::Result<()>;

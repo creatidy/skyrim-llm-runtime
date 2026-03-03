@@ -83,9 +83,10 @@ fn cmd_serve(args: &[String]) -> anyhow::Result<()> {
         };
 
         let request_id = envelope.request.request_id.clone();
+        let envelope_clone = envelope.clone();
         let response = service.process_request(envelope.request);
         file_transport
-            .write_response(&envelope, &response)
+            .write_response(&envelope_clone, &response)
             .map_err(|e| anyhow!(e.to_string()))?;
 
         service

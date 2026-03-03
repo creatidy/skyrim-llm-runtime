@@ -43,18 +43,22 @@ where
                 &request.request_id,
                 RuntimeErrorCode::ValidationFailed,
                 &err,
-                false,
-                None,
-                None,
+                CacheMeta {
+                    hit: false,
+                    key: None,
+                    age_seconds: None,
+                },
                 None,
             );
         }
 
         // 2) Normalize/redact before hashing/calling provider.
         let sanitized = self.safety.sanitize_request(&request);
-        let cache_key = self
-            .cache
-            .stable_key_for(&sanitized, &self.config.prompt_version, self.provider.model());
+        let cache_key = self.cache.stable_key_for(
+            &sanitized,
+            &self.config.prompt_version,
+            self.provider.model(),
+        );
 
         // 3) Fast path: return fresh cache hit when available.
         if self.config.caching.enabled {
@@ -94,9 +98,11 @@ where
                 &request.request_id,
                 RuntimeErrorCode::BudgetExceeded,
                 "request exceeds max_tokens_per_call budget",
-                false,
-                Some(cache_key),
-                None,
+                CacheMeta {
+                    hit: false,
+                    key: Some(cache_key),
+                    age_seconds: None,
+                },
                 None,
             );
         }
@@ -146,7 +152,10 @@ where
         };
 
         // 6) Enforce output constraints and spoiler policy.
-        let recap_payload = match self.safety.validate_candidate(&sanitized, candidate.clone()) {
+        let recap_payload = match self
+            .safety
+            .validate_candidate(&sanitized, candidate.clone())
+        {
             Ok(payload) => payload,
             Err(err) => {
                 self.metrics.validation_failures += 1;
@@ -207,13 +216,8 @@ where
             let _ = self.cache.set(&cache_key, &cached);
         }
 
-        let response = self.success_response(
-            &request.request_id,
-            cached,
-            false,
-            Some(cache_key),
-            Some(0),
-        );
+        let response =
+            self.success_response(&request.request_id, cached, false, Some(cache_key), Some(0));
 
         if self.config.replay.export_enabled {
             let _ = self.replay.export_bundle(&sanitized, &response, None);
@@ -251,9 +255,7 @@ where
         request_id: &str,
         code: RuntimeErrorCode,
         message: &str,
-        cache_hit: bool,
-        cache_key: Option<String>,
-        age_seconds: Option<u64>,
+        cache: CacheMeta,
         provider: Option<ProviderMeta>,
     ) -> RecapResponseV1 {
         let meta = ResponseMeta {
@@ -263,11 +265,7 @@ where
                 name: self.provider.name().to_string(),
                 model: self.provider.model().to_string(),
             }),
-            cache: CacheMeta {
-                hit: cache_hit,
-                key: cache_key,
-                age_seconds,
-            },
+            cache,
             budgets: BudgetsMeta {
                 tokens_in: None,
                 tokens_out: None,
