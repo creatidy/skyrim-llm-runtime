@@ -1,0 +1,67 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Runtime CLI: Serve",
+            "type": "lldb",
+            "request": "launch",
+            "cargo": {
+                "cwd": "${workspaceFolder}/runtime",
+                "args": [
+                    "build",
+                    "--package",
+                    "runtime-cli",
+                    "--bin",
+                    "runtime-cli"
+                ],
+                "filter": {
+                    "name": "runtime-cli",
+                    "kind": "bin"
+                }
+            },
+            "args": [
+                "serve",
+                "--transport",
+                "file"
+            ],
+            "cwd": "${workspaceFolder}/runtime",
+            "env": {
+                "RUST_BACKTRACE": "1"
+            },
+            "sourceLanguages": [
+                "rust"
+            ]
+        },
+        {
+            "name": "Runtime CLI: Simulate",
+            "type": "lldb",
+            "request": "launch",
+            "cargo": {
+                "cwd": "${workspaceFolder}/runtime",
+                "args": [
+                    "build",
+                    "--package",
+                    "runtime-cli",
+                    "--bin",
+                    "runtime-cli"
+                ],
+                "filter": {
+                    "name": "runtime-cli",
+                    "kind": "bin"
+                }
+            },
+            "args": [
+                "simulate",
+                "--spoiler-mode",
+                "safe"
+            ],
+            "cwd": "${workspaceFolder}/runtime",
+            "env": {
+                "RUST_BACKTRACE": "1"
+            },
+            "sourceLanguages": [
+                "rust"
+            ]
+        }
+    ]
+}
