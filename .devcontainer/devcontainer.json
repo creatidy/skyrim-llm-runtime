@@ -17,9 +17,9 @@
         "vadimcn.vscode-lldb",
         "tamasfe.even-better-toml",
         "fill-labs.dependi",
-        "twxs.cmake",
         "openai.chatgpt",
-        "yzhang.markdown-all-in-one"
+        "yzhang.markdown-all-in-one",
+        "ms-vscode.cpptools-extension-pack"
       ],
       "settings": {
         "editor.formatOnSave": true,

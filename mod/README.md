@@ -1,37 +1,59 @@
-# Skyrim mod integration (thin client contract)
+# Skyrim mod integration (real implementation target)
 
-This folder remains the Skyrim-side implementation placeholder. The runtime contract and expected behavior are now concrete.
+`mod/` now holds the Skyrim-side thin client target for P1 while `runtime/` stays provider/runtime focused.
 
-## PoC goals
+## What is implemented here
 
-- On-demand trigger (hotkey/lesser power).
-- Minimal event log payload.
-- File bridge request/response handoff.
-- Minimal UI rendering with clear status/error text.
+- Native thin-client core in C++20:
+  - bounded event log
+  - file-bridge request writer
+  - response polling
+  - recap/error mapping
+- `skyrim_llm_mod_harness` executable for local stepping outside Skyrim
+- `skyrim_llm_skse_stub` library that shows where SKSE hotkey and UI hooks attach
 
-## Runtime file-bridge contract (`v1`)
+## P1 responsibilities
+
+- On-demand hotkey trigger
+- Minimal event log payload
+- File bridge request/response handoff
+- Simple notification/message-style recap display
+- Clear offline/provider/budget/validation error mapping
+
+## Bridge contract
 
 - Write request JSON: `Data/SKSE/Plugins/SkyrimLLMRuntime/requests/<request_id>.json`
 - Read response JSON: `Data/SKSE/Plugins/SkyrimLLMRuntime/responses/<request_id>.json`
 
-Contract fields are versioned and defined in runtime schemas:
+Contract fields stay versioned in:
 
 - `runtime/contracts/recap-request-v1.schema.json`
 - `runtime/contracts/recap-response-v1.schema.json`
 
-## Error UX mapping expected by the mod
+## Local harness
 
-The runtime may return `ok=false` with error codes:
+Build from repo root:
 
-- `runtime_offline`: show "Runtime unavailable" message; no crash.
-- `provider_error`: show "Provider failed, fallback used if available".
-- `budget_exceeded`: show "Budget cap reached" with suggestion to retry later.
-- `validation_failed`: show "Response invalid; safe fallback applied".
-- `transport_error`: show "Bridge file error" and retry guidance.
+```bash
+cmake -S mod -B mod/build
+cmake --build mod/build
+```
 
-## Integration notes
+Run with the runtime already serving the file bridge:
 
-- No API keys or provider secrets in mod files/scripts.
-- Spoiler-safe mode should be default for trigger UI.
-- Keep the mod thin and provider-agnostic.
-- Real Skyrim/VistulaRim validation is external to this repo and tracked via protocol docs.
+```bash
+./mod/build/skyrim_llm_mod_harness
+```
+
+The harness simulates the hotkey path and uses the same request/response folders as the runtime PoC bridge.
+
+## SKSE-first posture
+
+The runtime-facing logic lives in `skyrim_llm_mod_core`. A real SKSE plugin should stay thin:
+
+- capture hotkey/input
+- gather current location/objective data
+- call `RecapController`
+- present the returned recap/error in game
+
+No provider keys or provider logic belong in `mod/`.

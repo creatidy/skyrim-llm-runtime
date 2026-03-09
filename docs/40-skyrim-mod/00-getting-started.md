@@ -8,6 +8,12 @@
 - Render the output.
 - Provide clear error messages.
 
+## Repo layout
+
+- `mod/` now contains the thin-client native core and a local harness.
+- `runtime/` remains the provider/runtime side of the bridge.
+- Real Skyrim hook-up should stay thin and call into the `mod/` controller layer.
+
 ## Non-negotiables
 
 - No provider keys in the mod.

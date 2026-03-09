@@ -8,8 +8,8 @@ Status markers:
 ## Functional
 
 - `[~]` Press hotkey -> recap appears in game, or clear error message.
-  - Simulator-driven request/response loop is implemented.
-  - Real Skyrim trigger/render is pending external integration pass.
+  - Runtime and in-repo mod-side bridge loop are implemented.
+  - Final in-game hotkey/UI validation is still required.
 - `[x]` Recap output is short and readable.
 - `[x]` Spoiler-safe mode is default.
 
@@ -17,14 +17,15 @@ Status markers:
 
 - `[x]` Provider keys never exist in Skyrim scripts or mod files.
 - `[~]` Runtime runs on localhost/default local file bridge.
-  - File bridge is implemented; local HTTP is out of scope for these iterations.
+  - File bridge is implemented end to end in repo; real Skyrim environment validation is pending.
 - `[x]` Request payload is minimal and redacted.
 - `[x]` Replay bundles are redacted by default posture.
 
 ## Reliability
 
 - `[~]` If runtime is offline -> understandable message contract is defined.
-  - In-game UX wiring is pending Skyrim mod implementation.
+  - Runtime-side simulator timeout test and native client error mapping are implemented.
+  - Real Skyrim message rendering still needs a final smoke pass.
 - `[x]` If provider fails -> fallback behavior works (cached or safe template).
 - `[x]` Validation failures fail closed.
 
@@ -46,5 +47,5 @@ Status markers:
 ## External validation gate (Iteration 3)
 
 - `[ ]` First real Skyrim roundtrip succeeds with clear degradation behavior.
-- `[ ]` Simulator suite remains green after integration adjustments.
+- `[x]` Simulator suite remains green after integration adjustments.
 - `[ ]` Integration findings documented and converted into backlog items.

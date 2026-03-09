@@ -25,24 +25,30 @@ Exit criteria:
 
 ## Milestone P1 - End-to-end Recap (file bridge)
 
-Status: **In progress (simulator E2E implemented)**
+Status: **In progress (repo implementation complete, real Skyrim pass pending)**
 
 Delivered in repo:
 - File-bridge transport implementation (`crates/transport-file`).
-- OpenAI adapter (PoC offline/mock path) with request building, retry envelope, and structured parsing.
+- OpenAI adapter with offline/mock path plus live HTTP execution path.
 - Safety pipeline: redaction, output constraints, spoiler-safe behavior, fail-closed fallback.
 - Caching: stable hash keying + metadata via file cache.
 - Replay bundle export with deterministic layout.
 - Simulator-driven E2E integration test and workflow.
+- In-repo Skyrim thin-client target under `mod/` with:
+  - bounded event log collection
+  - file-bridge request/response loop
+  - hotkey-driven recap controller target
+  - simple message-style UI mapping via native harness/stub
+- Env-only runtime secret posture (`OPENAI_API_KEY`).
 
 Remaining for full P1 closure:
-- Real OpenAI HTTP adapter path (optional for offline development, required for live provider validation).
-- Skyrim-side real mod trigger/render integration in external environment.
+- First real Skyrim roundtrip in the target game environment.
+- Final SKSE wiring from native stub to actual in-game input/UI hooks.
 
 Exit criteria:
-- Hotkey -> recap displayed in game. **Pending external integration run**.
-- No API key stored anywhere in the mod. **Met by architecture and docs**.
-- Replay bundle generated and replayable without launching Skyrim. **Met in simulator flow**.
+- Hotkey -> recap displayed in game. **Pending final in-game validation pass**.
+- No API key stored anywhere in the mod. **Met in repo implementation**.
+- Replay bundle generated and replayable without launching Skyrim. **Met in runtime flow**.
 
 ## Milestone P2 - Grounded in-game help (and optional narrator TTS)
 

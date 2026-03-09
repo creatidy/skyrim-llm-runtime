@@ -10,7 +10,6 @@ pub enum RuntimeMode {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct OpenAiConfig {
-    pub api_key: Option<String>,
     pub model: String,
     pub timeout_ms: u64,
     pub max_retries: u32,
@@ -85,7 +84,6 @@ impl RuntimeConfig {
             runtime_build_id: "dev-build".to_string(),
             prompt_version: "recap-v1".to_string(),
             openai: OpenAiConfig {
-                api_key: None,
                 model: "gpt-4.1-mini".to_string(),
                 timeout_ms: 20_000,
                 max_retries: 2,

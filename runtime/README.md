@@ -9,7 +9,7 @@ This folder now contains an executable Rust workspace for the Skyrim LLM Runtime
 - `examples/` - sample request payloads.
 - `bin/runtime-cli/` - CLI entrypoint (`serve`, `simulate`, `replay`, `init-config`).
 - `crates/runtime-core/` - contracts, config, service orchestration, safety, cache, replay, observability.
-- `crates/provider-openai/` - OpenAI provider adapter (mock/offline path with request building + structured parsing).
+- `crates/provider-openai/` - OpenAI provider adapter (mock/offline path plus live Responses API execution).
 - `crates/transport-file/` - file bridge transport implementation.
 - `bridge/` - local request/response folders for simulator-driven integration.
 - `replay-bundles/` - deterministic replay artifacts.
@@ -34,6 +34,8 @@ cargo run -p runtime-cli -- init-config --out config.dev.json
 
 You can also copy/edit `config.dev.example.json`.
 
+For live OpenAI execution, keep `mock_mode` set to `false` and export `OPENAI_API_KEY` in the runtime shell. API keys are not stored in config JSON.
+
 2. Run runtime server loop (file transport):
 
 ```bash
@@ -55,7 +57,7 @@ cargo run -p runtime-cli -- replay --bundle replay-bundles/<request_id>
 ## CLI surface
 
 - `serve --transport file [--config <path>] [--once]`
-- `simulate [--config <path>] [--spoiler-mode safe|full]`
+- `simulate [--config <path>] [--spoiler-mode safe|full] [--timeout-ms <ms>]`
 - `replay --bundle <path>`
 - `init-config [--out <path>]`
 
@@ -119,6 +121,14 @@ cd runtime
 cargo run -p runtime-cli -- simulate --config config.dev.json --spoiler-mode safe
 ```
 
+Live mode:
+
+```bash
+cd runtime
+export OPENAI_API_KEY=...
+cargo run -p runtime-cli -- serve --transport file --config config.dev.json
+```
+
 6. Inspect artifacts:
 
 - Replay bundles: `runtime/replay-bundles/`
@@ -130,7 +140,7 @@ cargo run -p runtime-cli -- simulate --config config.dev.json --spoiler-mode saf
 
 1. Runtime offline:
 - Do not start `serve`.
-- Run `simulate`.
+- Run `simulate --timeout-ms 500`.
 - Expect client timeout (`timeout waiting for response`).
 
 2. Cache hit:

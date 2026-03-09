@@ -6,9 +6,10 @@ Keep configuration explicit and user-controlled.
 
 - mode: player | developer
 - openai:
-  - api_key (from env or secrets store)
   - model
   - timeout_ms
+  - max_retries
+  - mock_mode
 - budgets:
   - max_calls_per_hour
   - max_tokens_per_call
@@ -25,4 +26,4 @@ Keep configuration explicit and user-controlled.
 
 ## Key rule
 
-Never require the user to put API keys into Skyrim mod files.
+`OPENAI_API_KEY` must come from the runtime environment. Never require the user to put API keys into Skyrim mod files or runtime JSON config.

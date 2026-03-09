@@ -12,3 +12,6 @@ uuid.workspace = true
 runtime-core = { path = "../../crates/runtime-core" }
 provider-openai = { path = "../../crates/provider-openai" }
 transport-file = { path = "../../crates/transport-file" }
+
+[dev-dependencies]
+tempfile.workspace = true

@@ -35,6 +35,11 @@ where
 {
     pub fn process_request(&mut self, request: RecapRequestV1) -> RecapResponseV1 {
         self.metrics.request_count += 1;
+        let provider_mode = if self.config.openai.mock_mode {
+            "mock"
+        } else {
+            "live"
+        };
 
         // 1) Contract sanity checks. Fail fast on invalid requests.
         if let Err(err) = request.validate_basic() {
@@ -115,7 +120,10 @@ where
                 let _ = self.logger.error(
                     "provider_error",
                     &request.request_id,
-                    json!({ "error": err.to_string() }),
+                    json!({
+                        "error": err.to_string(),
+                        "provider_mode": provider_mode,
+                    }),
                 );
                 if let Ok(Some(stale)) = self.cache.get_stale(&cache_key) {
                     return self.success_response(
@@ -215,6 +223,17 @@ where
         if self.config.caching.enabled {
             let _ = self.cache.set(&cache_key, &cached);
         }
+
+        let _ = self.logger.info(
+            "provider_response",
+            &request.request_id,
+            json!({
+                "provider_mode": provider_mode,
+                "provider_model": cached.provider.model,
+                "tokens_in": cached.budgets.tokens_in,
+                "tokens_out": cached.budgets.tokens_out,
+            }),
+        );
 
         let response =
             self.success_response(&request.request_id, cached, false, Some(cache_key), Some(0));

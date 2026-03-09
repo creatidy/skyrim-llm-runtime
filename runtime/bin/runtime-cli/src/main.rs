@@ -118,6 +118,11 @@ fn cmd_replay(args: &[String]) -> anyhow::Result<()> {
 fn cmd_simulate(args: &[String]) -> anyhow::Result<()> {
     let config_path = get_option(args, "--config");
     let config = load_config(config_path.as_deref())?;
+    let timeout_ms = get_option(args, "--timeout-ms")
+        .map(|value| value.parse::<u64>())
+        .transpose()
+        .context("parsing --timeout-ms")?
+        .unwrap_or(15_000);
 
     ensure_runtime_paths(&config)?;
 
@@ -134,7 +139,7 @@ fn cmd_simulate(args: &[String]) -> anyhow::Result<()> {
         .map_err(|e| anyhow!(e.to_string()))?;
 
     let response = transport
-        .wait_for_response(&request.request_id, Duration::from_secs(15))
+        .wait_for_response(&request.request_id, Duration::from_millis(timeout_ms))
         .map_err(|e| anyhow!(e.to_string()))?
         .ok_or_else(|| anyhow!("timeout waiting for response"))?;
 
@@ -235,6 +240,6 @@ fn has_flag(args: &[String], key: &str) -> bool {
 
 fn print_usage() {
     println!(
-        "runtime-cli commands:\n  serve --transport file [--config <path>] [--once]\n  simulate [--config <path>] [--spoiler-mode safe|full]\n  replay --bundle <path>\n  init-config [--out <path>]"
+        "runtime-cli commands:\n  serve --transport file [--config <path>] [--once]\n  simulate [--config <path>] [--spoiler-mode safe|full] [--timeout-ms <ms>]\n  replay --bundle <path>\n  init-config [--out <path>]"
     );
 }

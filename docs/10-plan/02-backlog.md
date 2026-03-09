@@ -9,11 +9,11 @@ Backlog items are small and testable. Status markers:
 
 - `[x]` Implement config loader (Player/Developer modes).
 - `[x]` Implement redaction rules (paths/usernames/machine names baseline).
-- `[~]` Implement OpenAI adapter:
+- `[x]` Implement OpenAI adapter:
   - `[x]` request building
   - `[x]` structured output parsing + validation handoff
   - `[x]` timeout/retry envelope (offline/mock path)
-  - `[ ]` live HTTP call path for real provider execution
+  - `[x]` live HTTP call path for real provider execution
 - `[x]` Implement caching:
   - `[x]` stable hash function
   - `[x]` cache metadata (hit/miss, age)
@@ -40,14 +40,14 @@ Backlog items are small and testable. Status markers:
 
 ## Skyrim mod
 
-- `[ ]` Add on-demand trigger (hotkey or lesser power).
-- `[ ]` Add minimal event log collector.
-- `[ ]` Add file-bridge write/poll/render loop in real mod.
-- `[ ]` Add error UX mapping in game:
-  - `[ ]` runtime offline
-  - `[ ]` provider error
-  - `[ ]` budget exceeded
-  - `[ ]` validation failed fallback
+- `[~]` Add on-demand trigger (hotkey or lesser power).
+- `[x]` Add minimal event log collector.
+- `[~]` Add file-bridge write/poll/render loop in real mod.
+- `[x]` Add error UX mapping in game/native client:
+  - `[x]` runtime offline
+  - `[x]` provider error
+  - `[x]` budget exceeded
+  - `[x]` validation failed fallback
 
 ## Real integration (Iteration 3 gate)
 
@@ -58,8 +58,8 @@ Backlog items are small and testable. Status markers:
 
 ## Next-up actionable tasks
 
-1. Implement live OpenAI HTTP adapter path behind existing `Provider` trait.
-2. Add runtime-offline timeout contract test from simulator client perspective.
-3. Add regression tests for forced provider failure and forced invalid output fallback.
-4. Perform first external real-Skyrim validation pass and log outcomes.
+1. Wire the SKSE stub to real in-game hotkey and message presentation.
+2. Perform first external real-Skyrim validation pass and log outcomes.
+3. Convert integration findings into stabilization tasks.
+4. Add CI/lint/format automation for runtime and mod harness builds.
 5. Start P2 prep: grounded help data pipeline and chunk citation contract draft.
