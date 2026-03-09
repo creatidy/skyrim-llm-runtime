@@ -76,6 +76,13 @@ bool RecapHotkeyBinding::IsRegistered() const {
     return registered_;
 }
 
+bool RecapHotkeyBinding::FeedKeyEvent(std::uint32_t scan_code, bool pressed) const {
+    if (!listener_ || !MatchesRegisteredHotkey(scan_code, pressed)) {
+        return false;
+    }
+    return listener_->HandleKeyEvent(scan_code, pressed);
+}
+
 void RecapHotkeyBinding::DispatchForTesting() const {
     if (handler_ != nullptr) {
         handler_();

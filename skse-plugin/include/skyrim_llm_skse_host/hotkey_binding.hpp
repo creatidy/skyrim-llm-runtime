@@ -14,6 +14,7 @@ public:
     void SetKeyboardDxScanCode(std::uint32_t scan_code);
     bool RegisterDefaultHotkey();
     bool IsRegistered() const;
+    bool FeedKeyEvent(std::uint32_t scan_code, bool pressed) const;
     void DispatchForTesting() const;
 
 private:

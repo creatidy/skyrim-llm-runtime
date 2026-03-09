@@ -55,7 +55,7 @@ That logic stays in `mod/`.
 - `src/hotkey.cpp`
   - recap hotkey dispatch helper
 - `src/hotkey_binding.cpp`
-  - TODO hotkey registration placeholder
+  - hotkey registration scaffold with a public `FeedKeyEvent(scan_code, pressed)` entrypoint
 - `src/location_capture.cpp`
   - TODO location capture placeholder
 - `src/game_time_capture.cpp`
@@ -84,6 +84,7 @@ What is ready:
 - callback wiring to `mod/include/skyrim_llm/plugin_api.hpp`
 - host-side structure
 - plugin entrypoint scaffold around `SkyrimPluginShell`
+- hotkey binding scaffold with public event-feed entrypoint
 - buildable portable scaffold target
 
 What is still missing:

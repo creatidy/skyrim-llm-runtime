@@ -42,6 +42,7 @@ Backlog items are small and testable. Status markers:
 
 - `[~]` Add on-demand trigger (hotkey or lesser power).
   - Thin integration shell, callback-facing API, and SKSE host scaffold are implemented in repo.
+  - `hotkey_binding.cpp` now exposes a public event-feed entrypoint for the future Skyrim input sink.
   - Real in-game hotkey registration is still missing.
 - `[x]` Add minimal event log collector.
 - `[~]` Add file-bridge write/poll/render loop in real mod.
