@@ -215,7 +215,9 @@ Inside `skse-plugin/` the current scaffolds are:
   - scaffold for reading current Skyrim time
 - `src/hotkey_binding.cpp`
   - scaffold for real input hook registration
+  - contains a CommonLib-style `RE::InputEvent` sink scaffold
   - exposes a public `FeedKeyEvent(scan_code, pressed)` handoff point for the future Skyrim input sink
+  - unregisters its event sink cleanly on teardown
 - `src/notification_ui.cpp`
   - scaffold for in-game notification/message presentation
 
@@ -223,10 +225,12 @@ These files are now the direct Phase 2 implementation surfaces.
 
 For hotkey integration specifically, the intended final flow is now explicit:
 
-1. Skyrim/CommonLib input listener receives a key event.
-2. The listener calls `FeedKeyEvent(scan_code, pressed)`.
+1. Skyrim/CommonLib `RE::InputEvent` sink receives a keyboard event.
+2. The sink forwards `idCode` and pressed state into `FeedKeyEvent(scan_code, pressed)`.
 3. `hotkey_binding` matches the configured recap hotkey.
 4. The registered recap handler fires.
+
+This is now the single intended dispatch path for recap hotkey activation.
 
 ## Build flow
 

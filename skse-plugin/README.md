@@ -55,7 +55,7 @@ That logic stays in `mod/`.
 - `src/hotkey.cpp`
   - recap hotkey dispatch helper
 - `src/hotkey_binding.cpp`
-  - hotkey registration scaffold with a public `FeedKeyEvent(scan_code, pressed)` entrypoint
+  - CommonLib-style `RE::InputEvent` sink scaffold with clean unregister logic and a public `FeedKeyEvent(scan_code, pressed)` entrypoint
 - `src/location_capture.cpp`
   - TODO location capture placeholder
 - `src/game_time_capture.cpp`
@@ -84,7 +84,8 @@ What is ready:
 - callback wiring to `mod/include/skyrim_llm/plugin_api.hpp`
 - host-side structure
 - plugin entrypoint scaffold around `SkyrimPluginShell`
-- hotkey binding scaffold with public event-feed entrypoint
+- hotkey binding scaffold with CommonLib-style `RE::InputEvent` sink structure
+- single hotkey dispatch path through `FeedKeyEvent(...)`
 - buildable portable scaffold target
 
 What is still missing:

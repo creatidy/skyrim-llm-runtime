@@ -10,6 +10,8 @@ class RecapHotkeyBinding {
 public:
     static constexpr std::uint32_t kDefaultKeyboardDxScanCode = 0x42;  // F8
 
+    ~RecapHotkeyBinding();
+
     void SetHandler(std::function<void()> handler);
     void SetKeyboardDxScanCode(std::uint32_t scan_code);
     bool RegisterDefaultHotkey();
@@ -21,6 +23,7 @@ private:
     struct Listener;
 
     bool InstallSkyrimInputHook();
+    void UninstallSkyrimInputHook();
     bool MatchesRegisteredHotkey(std::uint32_t scan_code, bool pressed) const;
 
     std::function<void()> handler_;
