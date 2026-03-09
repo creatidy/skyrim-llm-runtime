@@ -108,7 +108,7 @@ If you are wiring Skyrim for the first time, these are the files to finish and c
 
 ## Intended usage
 
-The future Windows-side plugin shell should:
+The in-repo Windows plugin host should:
 
 1. implement concrete `GameApi`
 2. implement concrete `UiApi`
@@ -118,7 +118,22 @@ The future Windows-side plugin shell should:
 
 ## Build note
 
-`skse-plugin/CMakeLists.txt` builds only the host scaffold library.
+`skse-plugin/CMakeLists.txt` now supports two build modes:
 
-It does not attempt to build a real Skyrim plugin in this Linux container.
-The final DLL still has to be built in a Windows environment with SKSE/CommonLibSSE-NG dependencies.
+- portable scaffold build:
+  - always available
+  - builds `skyrim_llm_skse_host_scaffold`
+  - keeps the host layer buildable without Windows-only dependencies
+- Windows/CommonLibSSE build:
+  - enabled when building on Windows with `CommonLibSSE` available
+  - builds `skyrim_llm_skse_plugin` as `SkyrimLLMRuntime.dll`
+  - can optionally copy the DLL/PDB to `SKYRIM_LLM_DEPLOY_DIR`
+
+Important options:
+
+- `SKYRIM_LLM_BUILD_WINDOWS_PLUGIN`
+  - enable/disable the real Windows plugin target
+- `SKYRIM_LLM_DEPLOY_DIR`
+  - optional deployment folder for the built DLL/PDB
+
+The real DLL still has to be built in a Windows environment with SKSE/CommonLibSSE-NG dependencies.

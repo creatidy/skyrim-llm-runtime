@@ -70,7 +70,7 @@ Backlog items are small and testable. Status markers:
 
 ## Next-up actionable tasks
 
-1. Build the in-repo `skse-plugin/` host layer in the real Windows/SKSE environment.
+1. Build the in-repo `skse-plugin/` target on Windows with `CommonLibSSE` available and validate the DLL output/deploy path.
 2. Implement Phase 2 callbacks: snapshot capture, hotkey registration, and in-game notification/message presentation.
 3. Perform first external real-Skyrim validation pass and log outcomes.
 4. Convert integration findings into stabilization tasks.

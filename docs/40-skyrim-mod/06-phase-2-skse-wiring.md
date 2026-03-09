@@ -244,15 +244,27 @@ Target flow for the real Windows build of the in-repo host layer:
 
 1. Open this repository in VS Code from Windows.
 2. Configure CMake for the Windows toolchain.
-3. Build the in-repo `skse-plugin/` target together with the shared `mod/` code and Windows-side SKSE/CommonLibSSE-NG dependencies.
-4. Build the plugin DLL.
-5. Copy the DLL and optional PDB into:
+3. Make `CommonLibSSE` available to CMake for the in-repo `skse-plugin/` target.
+4. Build the in-repo `skse-plugin` target together with the shared `mod/` code.
+   - portable target: `skyrim_llm_skse_host_scaffold`
+   - Windows plugin target: `skyrim_llm_skse_plugin`
+5. Verify that the plugin DLL was produced.
+6. Copy the DLL and optional PDB into:
 
 ```text
 E:\Modding\VistulaRim\MO2\mods\SkyrimLLMRuntime\SKSE\Plugins\
 ```
 
-6. Launch Skyrim through SKSE with the VistulaRim profile active.
+7. Launch Skyrim through SKSE with the VistulaRim profile active.
+
+Current CMake support in repo:
+
+- `skse-plugin/CMakeLists.txt` always builds the portable host scaffold
+- on Windows, if `CommonLibSSE` is found, it also defines:
+  - `skyrim_llm_skse_plugin`
+  - output name `SkyrimLLMRuntime.dll`
+- optional deployment can be configured with:
+  - `SKYRIM_LLM_DEPLOY_DIR`
 
 ## First-pass deployment checklist
 
