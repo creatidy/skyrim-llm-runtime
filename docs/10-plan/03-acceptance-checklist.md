@@ -9,7 +9,11 @@ Status markers:
 
 - `[~]` Press hotkey -> recap appears in game, or clear error message.
   - Runtime and in-repo mod-side bridge loop are implemented.
-  - Final in-game hotkey/UI validation is still required.
+  - Runtime/bridge preparation for the real environment is complete.
+  - Current work is Phase 2: real Skyrim-side hotkey/UI/snapshot wiring.
+  - See:
+    - `docs/40-skyrim-mod/05-first-real-roundtrip.md`
+    - `docs/40-skyrim-mod/06-phase-2-skse-wiring.md`
 - `[x]` Recap output is short and readable.
 - `[x]` Spoiler-safe mode is default.
 
@@ -26,6 +30,7 @@ Status markers:
 - `[~]` If runtime is offline -> understandable message contract is defined.
   - Runtime-side simulator timeout test and native client error mapping are implemented.
   - Real Skyrim message rendering still needs a final smoke pass.
+  - Phase 2 wiring is the current dependency.
 - `[x]` If provider fails -> fallback behavior works (cached or safe template).
 - `[x]` Validation failures fail closed.
 
@@ -47,5 +52,6 @@ Status markers:
 ## External validation gate (Iteration 3)
 
 - `[ ]` First real Skyrim roundtrip succeeds with clear degradation behavior.
+  - Bring-up plan: `docs/40-skyrim-mod/05-first-real-roundtrip.md`
 - `[x]` Simulator suite remains green after integration adjustments.
 - `[ ]` Integration findings documented and converted into backlog items.

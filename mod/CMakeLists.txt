@@ -11,10 +11,23 @@ add_library(skyrim_llm_mod_core
 )
 target_include_directories(skyrim_llm_mod_core PUBLIC include)
 
+add_library(skyrim_llm_skyrim_integration
+    src/skse_plugin_stub.cpp
+    src/skyrim_integration.cpp
+)
+target_include_directories(skyrim_llm_skyrim_integration PUBLIC include)
+target_link_libraries(skyrim_llm_skyrim_integration PRIVATE skyrim_llm_mod_core)
+
+add_library(skyrim_llm_plugin_api
+    src/plugin_api.cpp
+)
+target_include_directories(skyrim_llm_plugin_api PUBLIC include)
+target_link_libraries(skyrim_llm_plugin_api PRIVATE skyrim_llm_skyrim_integration)
+
 add_executable(skyrim_llm_mod_harness
     src/harness_main.cpp
 )
-target_link_libraries(skyrim_llm_mod_harness PRIVATE skyrim_llm_mod_core)
+target_link_libraries(skyrim_llm_mod_harness PRIVATE skyrim_llm_skyrim_integration)
 
 add_library(skyrim_llm_skse_stub STATIC
     src/skse_plugin_stub.cpp

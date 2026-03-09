@@ -38,12 +38,18 @@ Delivered in repo:
   - bounded event log collection
   - file-bridge request/response loop
   - hotkey-driven recap controller target
-  - simple message-style UI mapping via native harness/stub
+  - thin Skyrim integration layer (`skyrim_integration`) for snapshot/UI orchestration
+  - thin plugin-facing callback API (`plugin_api`) for a future real SKSE shell
+  - simple message-style UI mapping via native harness
 - Env-only runtime secret posture (`OPENAI_API_KEY`).
 
 Remaining for full P1 closure:
 - First real Skyrim roundtrip in the target game environment.
-- Final SKSE wiring from native stub to actual in-game input/UI hooks.
+  - Roundtrip tutorial and phased status live in `docs/40-skyrim-mod/05-first-real-roundtrip.md`.
+  - Phase 1 (runtime path + real bridge folder preparation) is done in the current working setup.
+  - Current focus is Phase 2: wiring the real Skyrim-side shell to the prepared integration layer under `mod/`.
+- Final SKSE wiring from the prepared thin integration layer into actual in-game hotkey/UI hooks.
+  - Implementation target and build/deploy guidance live in `docs/40-skyrim-mod/06-phase-2-skse-wiring.md`.
 
 Exit criteria:
 - Hotkey -> recap displayed in game. **Pending final in-game validation pass**.

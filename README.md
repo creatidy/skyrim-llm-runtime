@@ -22,6 +22,7 @@ The PoC proves the full loop is possible:
 - `docs/40-skyrim-mod/` - Skyrim-side integration notes (thin client posture, file bridge, minimal UI).
 - `runtime/` - Rust workspace implementation (contracts, file transport, runtime CLI, safety/cache/replay, live OpenAI path).
 - `mod/` - Skyrim-side thin client implementation target and local native harness.
+- `skse-plugin/` - thin Windows/SKSE host scaffold that wraps the shared `mod/` code without duplicating it.
 
 ## Docs navigation logic
 

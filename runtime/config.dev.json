@@ -27,9 +27,9 @@
     "directory": "replay-bundles"
   },
   "bridge": {
-    "base_dir": "bridge",
-    "requests_dir": "bridge/requests",
-    "responses_dir": "bridge/responses"
+    "base_dir": "/skyrim-mod/SKSE/Plugins/SkyrimLLMRuntime",
+    "requests_dir": "/skyrim-mod/SKSE/Plugins/SkyrimLLMRuntime/requests",
+    "responses_dir": "/skyrim-mod/SKSE/Plugins/SkyrimLLMRuntime/responses"
   },
   "observability": {
     "log_file": "runtime.log",

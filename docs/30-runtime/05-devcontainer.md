@@ -60,6 +60,7 @@ cargo run -p runtime-cli -- simulate --config config.dev.json --spoiler-mode saf
 - Replay bundles are under `runtime/replay-bundles/`.
 - Metrics/logs are `runtime/metrics.json` and `runtime/runtime.log`.
 - Codex state is persisted via Docker volume at `/home/vscode/.codex`, so Codex auth/config/skills survive container rebuilds.
+- This local setup binds `E:\Modding\VistulaRim\MO2\mods\SkyrimLLMRuntime` to `/skyrim-mod` so the runtime can read and write bridge files directly against the MO2 mod folder. When VS Code runs on Windows, use a Windows host path for that bind mount, not a WSL path like `/mnt/e/...`.
 
 ## Scenario checks
 

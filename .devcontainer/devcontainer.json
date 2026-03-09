@@ -4,7 +4,8 @@
   "mounts": [
     "source=codex-home,target=/home/vscode/.codex,type=volume",
     "source=rust-cache,target=/home/vscode/.cargo,type=volume",
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached"
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached",
+    "source=E:\\Modding\\VistulaRim\\MO2\\mods\\SkyrimLLMRuntime,target=/skyrim-mod,type=bind,consistency=cached"
   ],
   "remoteEnv": {
     "PATH": "${containerEnv:PATH}:/home/vscode/.codex/bin:/home/vscode/.local/bin"

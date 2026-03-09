@@ -41,8 +41,15 @@ Backlog items are small and testable. Status markers:
 ## Skyrim mod
 
 - `[~]` Add on-demand trigger (hotkey or lesser power).
+  - Thin integration shell and callback-facing API are implemented in repo.
+  - Real in-game hotkey registration is still missing.
 - `[x]` Add minimal event log collector.
 - `[~]` Add file-bridge write/poll/render loop in real mod.
+  - Native controller + bridge client + integration/UI abstractions are implemented.
+  - Actual Skyrim snapshot capture and in-game UI binding are still missing.
+- `[x]` Add thin Skyrim integration layer around the native controller:
+  - `[x]` `skyrim_integration` orchestration layer
+  - `[x]` `plugin_api` callback-facing ABI for a future SKSE shell
 - `[x]` Add error UX mapping in game/native client:
   - `[x]` runtime offline
   - `[x]` provider error
@@ -52,14 +59,16 @@ Backlog items are small and testable. Status markers:
 ## Real integration (Iteration 3 gate)
 
 - `[x]` Add real Skyrim validation protocol doc.
+- `[x]` Add phased roundtrip tutorial for real Skyrim bring-up.
+- `[x]` Add Phase 2 wiring/build/deploy guide for the Skyrim-side shell.
 - `[x]` Add issue template for external modpack findings.
 - `[ ]` Execute first VistulaRim smoke pass and capture findings.
 - `[ ]` Convert integration findings into stabilization tasks.
 
 ## Next-up actionable tasks
 
-1. Wire the SKSE stub to real in-game hotkey and message presentation.
-2. Perform first external real-Skyrim validation pass and log outcomes.
-3. Convert integration findings into stabilization tasks.
-4. Add CI/lint/format automation for runtime and mod harness builds.
-5. Start P2 prep: grounded help data pipeline and chunk citation contract draft.
+1. Build or import the real Windows/SKSE plugin shell that calls `mod/include/skyrim_llm/plugin_api.hpp`.
+2. Implement Phase 2 callbacks: snapshot capture, hotkey registration, and in-game notification/message presentation.
+3. Perform first external real-Skyrim validation pass and log outcomes.
+4. Convert integration findings into stabilization tasks.
+5. Add CI/lint/format automation for runtime and mod harness builds.

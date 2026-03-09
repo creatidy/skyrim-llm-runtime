@@ -13,6 +13,9 @@ This protocol defines the first mandatory real-Skyrim validation pass after simu
 - Simulator-based P1 flow passes: request -> response -> replay bundle.
 - Runtime file bridge and fallback behavior verified in repo tests.
 - Redaction enabled by default in runtime configuration.
+- Roundtrip bring-up should follow:
+  - `docs/40-skyrim-mod/05-first-real-roundtrip.md`
+  - `docs/40-skyrim-mod/06-phase-2-skse-wiring.md`
 
 ## Smoke checklist
 
