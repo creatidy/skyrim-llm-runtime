@@ -97,7 +97,7 @@ Typical prerequisites for that Windows-side build:
 - Visual Studio C++ build tools installed on Windows
 - CMake
 - `vcpkg`
-- a real SKSE/CommonLibSSE-NG plugin shell project
+- SKSE/CommonLibSSE-NG headers and libraries available to the in-repo `skse-plugin/` target
 - VS Code C++ and CMake extensions
 
 Recommended reference shell projects:
@@ -105,7 +105,7 @@ Recommended reference shell projects:
 - CommonLibSSE-NG: <https://github.com/CharmedBaryon/CommonLibSSE-NG>
 - SKSE template hello world: <https://github.com/SkyrimScripting/SKSE_Template_HelloWorld>
 
-These references support opening the project in VS Code even though the actual compiler toolchain is Windows/MSVC.
+These references are useful for matching the final Windows/MSVC build shape of the in-repo `skse-plugin/` target.
 
 ## Deployment target
 
@@ -240,11 +240,11 @@ For UI integration specifically, the current scaffold now separates the two main
 
 ## Build flow
 
-Target flow for the real shell project:
+Target flow for the real Windows build of the in-repo host layer:
 
-1. Open the Windows-side plugin project in VS Code.
+1. Open this repository in VS Code from Windows.
 2. Configure CMake for the Windows toolchain.
-3. Link or include this repo's `mod/include/`, `mod/src/`, and `skse-plugin/` host scaffold.
+3. Build the in-repo `skse-plugin/` target together with the shared `mod/` code and Windows-side SKSE/CommonLibSSE-NG dependencies.
 4. Build the plugin DLL.
 5. Copy the DLL and optional PDB into:
 
@@ -279,6 +279,6 @@ Phase 2 is done when all of these are true:
 
 1. Use `skse-plugin/` as the in-repo host layer.
 2. Finish the concrete Skyrim bindings in the Phase 2 scaffold files.
-3. Confirm the `SKSEPluginLoad(...)` path in the real Windows/SKSE build.
+3. Confirm the `SKSEPluginLoad(...)` path in the real Windows build of `skse-plugin/`.
 4. Build and deploy the DLL into the MO2 mod folder.
 5. Run the first real roundtrip smoke pass.

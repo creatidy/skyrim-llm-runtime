@@ -99,7 +99,7 @@ What is still missing:
 
 ## Concrete Phase 2 TODO files
 
-If you are wiring Skyrim for the first time, these are the files to replace with real game bindings:
+If you are wiring Skyrim for the first time, these are the files to finish and confirm in the real Windows build:
 
 - `src/location_capture.cpp`
 - `src/game_time_capture.cpp`

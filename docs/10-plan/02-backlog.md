@@ -70,7 +70,7 @@ Backlog items are small and testable. Status markers:
 
 ## Next-up actionable tasks
 
-1. Build or import the real Windows/SKSE plugin shell that calls `mod/include/skyrim_llm/plugin_api.hpp`.
+1. Build the in-repo `skse-plugin/` host layer in the real Windows/SKSE environment.
 2. Implement Phase 2 callbacks: snapshot capture, hotkey registration, and in-game notification/message presentation.
 3. Perform first external real-Skyrim validation pass and log outcomes.
 4. Convert integration findings into stabilization tasks.
