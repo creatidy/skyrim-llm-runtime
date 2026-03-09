@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <memory>
 
 namespace skyrim_llm::skse_host {
 
@@ -16,12 +17,15 @@ public:
     void DispatchForTesting() const;
 
 private:
+    struct Listener;
+
     bool InstallSkyrimInputHook();
     bool MatchesRegisteredHotkey(std::uint32_t scan_code, bool pressed) const;
 
     std::function<void()> handler_;
     std::uint32_t keyboard_dx_scan_code_{kDefaultKeyboardDxScanCode};
     bool registered_{false};
+    std::shared_ptr<Listener> listener_;
 };
 
 }  // namespace skyrim_llm::skse_host

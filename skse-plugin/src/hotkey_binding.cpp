@@ -8,6 +8,47 @@
 #endif
 
 namespace skyrim_llm::skse_host {
+namespace {
+
+struct ListenerState {
+    std::function<void()> handler;
+    std::uint32_t keyboard_dx_scan_code{RecapHotkeyBinding::kDefaultKeyboardDxScanCode};
+};
+
+}  // namespace
+
+struct RecapHotkeyBinding::Listener {
+    explicit Listener(ListenerState state) : state_(std::move(state)) {}
+
+    bool HandleKeyEvent(std::uint32_t scan_code, bool pressed) const {
+        if (!pressed || scan_code != state_.keyboard_dx_scan_code || state_.handler == nullptr) {
+            return false;
+        }
+
+        state_.handler();
+        return true;
+    }
+
+#if SKYRIM_LLM_HAS_RE_API
+    bool Install() {
+        // TODO(skyrim-phase2): Register this listener with the chosen Skyrim
+        // input pipeline. Typical options are:
+        // - a BSInputDeviceManager/BSInputEventReceiver sink
+        // - an SKSE input event registration path
+        // - a CommonLibSSE-NG event sink helper
+        //
+        // Once installed, Skyrim keyboard button events should be forwarded to
+        // HandleKeyEvent(scan_code, pressed).
+        return true;
+    }
+#else
+    bool Install() {
+        return true;
+    }
+#endif
+
+    ListenerState state_;
+};
 
 void RecapHotkeyBinding::SetHandler(std::function<void()> handler) {
     handler_ = std::move(handler);
@@ -23,6 +64,10 @@ bool RecapHotkeyBinding::RegisterDefaultHotkey() {
         return false;
     }
 
+    listener_ = std::make_shared<Listener>(ListenerState{
+        .handler = handler_,
+        .keyboard_dx_scan_code = keyboard_dx_scan_code_,
+    });
     registered_ = InstallSkyrimInputHook();
     return registered_;
 }
@@ -38,27 +83,10 @@ void RecapHotkeyBinding::DispatchForTesting() const {
 }
 
 bool RecapHotkeyBinding::InstallSkyrimInputHook() {
-#if SKYRIM_LLM_HAS_RE_API
-    // TODO(skyrim-phase2): Install a real keyboard input listener through the
-    // chosen SKSE/CommonLibSSE path. A practical implementation usually does one
-    // of the following:
-    // 1. register an input event sink and inspect RE::ButtonEvent values, or
-    // 2. hook an existing menu/input handler and dispatch into handler_ when the
-    //    registered DirectInput scan code is pressed.
-    //
-    // Expected matching logic:
-    // - keyboard device only
-    // - scan code == keyboard_dx_scan_code_
-    // - pressed event transition only
-    //
-    // When that integration is added, it should call handler_() on match and
-    // return true once the sink/hook is successfully installed.
-    return true;
-#else
-    // Outside the real Windows Skyrim build we keep the scaffold usable without
-    // forcing Skyrim headers or dependencies.
-    return true;
-#endif
+    if (!listener_) {
+        return false;
+    }
+    return listener_->Install();
 }
 
 bool RecapHotkeyBinding::MatchesRegisteredHotkey(std::uint32_t scan_code, bool pressed) const {
