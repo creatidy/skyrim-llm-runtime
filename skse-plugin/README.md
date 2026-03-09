@@ -67,7 +67,7 @@ That logic stays in `mod/`.
 - `src/ui.cpp`
   - host-ready UI helper
 - `src/plugin_main.cpp`
-  - placeholder initialization helper for the future real plugin entrypoint
+  - plugin entrypoint scaffold that owns `SkyrimPluginShell`
 - `src/plugin_shell.cpp`
   - concrete owner object for host init and hotkey dispatch
 - `src/skyrim_game_api.cpp`
@@ -83,14 +83,15 @@ What is ready:
 
 - callback wiring to `mod/include/skyrim_llm/plugin_api.hpp`
 - host-side structure
+- plugin entrypoint scaffold around `SkyrimPluginShell`
 - buildable portable scaffold target
 
 What is still missing:
 
-- real SKSE/CommonLibSSE-NG plugin entrypoint
 - real hotkey registration
 - real Skyrim data extraction
 - real in-game notifications/message UI
+- final SKSE/CommonLibSSE-NG load-path confirmation in the real Windows build
 - Windows DLL build + deployment into the MO2 mod folder
 
 ## Concrete Phase 2 TODO files

@@ -39,7 +39,13 @@ The repo now also contains an in-repo host scaffold:
 - `skse-plugin/`
   - thin host-side wrapper around `plugin_api.hpp`
   - callback-oriented `HostContext`
-  - placeholder workflow files for hotkey, snapshot seeding, and UI
+  - `SkyrimPluginShell` owner object
+  - plugin entrypoint scaffold in `src/plugin_main.cpp`
+  - concrete scaffold files for:
+    - location capture
+    - game-time capture
+    - hotkey binding
+    - notification/message UI
 
 ## What is still missing
 
@@ -47,10 +53,10 @@ The repo still does **not** contain the final Skyrim-loadable shell.
 
 Missing work:
 
-- real SKSE plugin entrypoint and load/init
 - real hotkey registration
 - real Skyrim snapshot capture
 - real in-game UI binding
+- final SKSE/CommonLibSSE-NG load/init confirmation in the real Windows build
 - final Windows plugin build/deployment flow using the `skse-plugin/` scaffold as the host layer
 
 That is the work required to finish Phase 2.
@@ -194,6 +200,26 @@ Optional but useful:
 - call `SkyrimLlm_RecordQuestObjective(...)` when objective text changes
 - call `SkyrimLlm_RecordNote(...)` from a debug command or temporary test hook
 
+## Current Phase 2 code map
+
+Inside `skse-plugin/` the current scaffolds are:
+
+- `src/plugin_main.cpp`
+  - owns the singleton `SkyrimPluginShell`
+  - defines a guarded `SKSEPluginLoad(...)` scaffold when SKSE headers are available
+- `src/plugin_shell.cpp`
+  - owns host init, state seeding, and recap hotkey dispatch
+- `src/location_capture.cpp`
+  - scaffold for reading current Skyrim location
+- `src/game_time_capture.cpp`
+  - scaffold for reading current Skyrim time
+- `src/hotkey_binding.cpp`
+  - scaffold for real input hook registration
+- `src/notification_ui.cpp`
+  - scaffold for in-game notification/message presentation
+
+These files are now the direct Phase 2 implementation surfaces.
+
 ## Build flow
 
 Target flow for the real shell project:
@@ -234,7 +260,7 @@ Phase 2 is done when all of these are true:
 ## Immediate next tasks for the user
 
 1. Use `skse-plugin/` as the in-repo host layer.
-2. Add the real Windows/SKSE entrypoint and concrete Skyrim bindings on top of it.
-3. Implement the concrete `GameApi` and `UiApi` classes for Skyrim.
+2. Finish the concrete Skyrim bindings in the Phase 2 scaffold files.
+3. Confirm the `SKSEPluginLoad(...)` path in the real Windows/SKSE build.
 4. Build and deploy the DLL into the MO2 mod folder.
 5. Run the first real roundtrip smoke pass.

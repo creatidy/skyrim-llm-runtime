@@ -41,11 +41,12 @@ Backlog items are small and testable. Status markers:
 ## Skyrim mod
 
 - `[~]` Add on-demand trigger (hotkey or lesser power).
-  - Thin integration shell and callback-facing API are implemented in repo.
+  - Thin integration shell, callback-facing API, and SKSE host scaffold are implemented in repo.
   - Real in-game hotkey registration is still missing.
 - `[x]` Add minimal event log collector.
 - `[~]` Add file-bridge write/poll/render loop in real mod.
   - Native controller + bridge client + integration/UI abstractions are implemented.
+  - `plugin_main.cpp` and `SkyrimPluginShell` scaffolds are implemented in repo.
   - Actual Skyrim snapshot capture and in-game UI binding are still missing.
 - `[x]` Add thin Skyrim integration layer around the native controller:
   - `[x]` `skyrim_integration` orchestration layer
