@@ -63,7 +63,7 @@ That logic stays in `mod/`.
 - `src/snapshot.cpp`
   - optional initial event-log seeding helper
 - `src/notification_ui.cpp`
-  - TODO in-game notification/message presentation placeholder
+  - UI scaffold with separate HUD-notification and message-box presentation paths
 - `src/ui.cpp`
   - host-ready UI helper
 - `src/plugin_main.cpp`
@@ -86,6 +86,7 @@ What is ready:
 - plugin entrypoint scaffold around `SkyrimPluginShell`
 - hotkey binding scaffold with CommonLib-style `RE::InputEvent` sink structure
 - single hotkey dispatch path through `FeedKeyEvent(...)`
+- UI scaffold with separate HUD-notification and message-box paths
 - buildable portable scaffold target
 
 What is still missing:

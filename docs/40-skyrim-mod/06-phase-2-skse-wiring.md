@@ -220,6 +220,7 @@ Inside `skse-plugin/` the current scaffolds are:
   - unregisters its event sink cleanly on teardown
 - `src/notification_ui.cpp`
   - scaffold for in-game notification/message presentation
+  - separates HUD-notification presentation from message-box presentation
 
 These files are now the direct Phase 2 implementation surfaces.
 
@@ -231,6 +232,11 @@ For hotkey integration specifically, the intended final flow is now explicit:
 4. The registered recap handler fires.
 
 This is now the single intended dispatch path for recap hotkey activation.
+
+For UI integration specifically, the current scaffold now separates the two main user-facing paths:
+
+1. HUD/status notification for short transient text
+2. message box for recap/error body text
 
 ## Build flow
 
