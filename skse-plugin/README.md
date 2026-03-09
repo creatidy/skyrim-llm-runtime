@@ -30,10 +30,18 @@ That logic stays in `mod/`.
 
 - `include/skyrim_llm_skse_host/game_api.hpp`
   - abstract Skyrim-side snapshot source
+- `include/skyrim_llm_skse_host/location_capture.hpp`
+  - concrete TODO surface for player location capture
+- `include/skyrim_llm_skse_host/game_time_capture.hpp`
+  - concrete TODO surface for in-game time capture
 - `include/skyrim_llm_skse_host/ui_api.hpp`
   - abstract Skyrim-side UI sink
+- `include/skyrim_llm_skse_host/notification_ui.hpp`
+  - concrete TODO surface for in-game notifications/message UI
 - `include/skyrim_llm_skse_host/host_context.hpp`
   - owns the `plugin_api.hpp` handle and callback wiring
+- `include/skyrim_llm_skse_host/hotkey_binding.hpp`
+  - concrete TODO surface for recap hotkey registration
 - `include/skyrim_llm_skse_host/skyrim_game_api.hpp`
   - concrete placeholder `GameApi` implementation
 - `include/skyrim_llm_skse_host/skyrim_ui_api.hpp`
@@ -46,8 +54,16 @@ That logic stays in `mod/`.
   - creates/destroys the `plugin_api` handle and forwards callbacks
 - `src/hotkey.cpp`
   - recap hotkey dispatch helper
+- `src/hotkey_binding.cpp`
+  - TODO hotkey registration placeholder
+- `src/location_capture.cpp`
+  - TODO location capture placeholder
+- `src/game_time_capture.cpp`
+  - TODO game-time capture placeholder
 - `src/snapshot.cpp`
   - optional initial event-log seeding helper
+- `src/notification_ui.cpp`
+  - TODO in-game notification/message presentation placeholder
 - `src/ui.cpp`
   - host-ready UI helper
 - `src/plugin_main.cpp`
@@ -76,6 +92,15 @@ What is still missing:
 - real Skyrim data extraction
 - real in-game notifications/message UI
 - Windows DLL build + deployment into the MO2 mod folder
+
+## Concrete Phase 2 TODO files
+
+If you are wiring Skyrim for the first time, these are the files to replace with real game bindings:
+
+- `src/location_capture.cpp`
+- `src/game_time_capture.cpp`
+- `src/hotkey_binding.cpp`
+- `src/notification_ui.cpp`
 
 ## Intended usage
 

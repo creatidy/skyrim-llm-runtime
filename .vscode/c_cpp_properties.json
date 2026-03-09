@@ -1,0 +1,20 @@
+{
+    "version": 4,
+    "configurations": [
+        {
+            "name": "Linux",
+            "cppStandard": "c++20",
+            "includePath": [
+                "${workspaceFolder}/skse-plugin/include",
+                "${workspaceFolder}/mod/include"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/skse-plugin/include",
+                    "${workspaceFolder}/mod/include"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ]
+}

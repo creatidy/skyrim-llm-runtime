@@ -1,5 +1,6 @@
 #pragma once
 
+#include "skyrim_llm_skse_host/notification_ui.hpp"
 #include "skyrim_llm_skse_host/ui_api.hpp"
 
 #include <string>
@@ -15,6 +16,7 @@ public:
 
 private:
     std::string channel_name_;
+    NotificationUi notifications_;
 };
 
 }  // namespace skyrim_llm::skse_host

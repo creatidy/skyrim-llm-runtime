@@ -1,6 +1,8 @@
 #pragma once
 
+#include "skyrim_llm_skse_host/game_time_capture.hpp"
 #include "skyrim_llm_skse_host/game_api.hpp"
+#include "skyrim_llm_skse_host/location_capture.hpp"
 
 #include <optional>
 #include <string>
@@ -20,6 +22,10 @@ public:
     void ClearDebugSnapshot();
 
 private:
+    std::optional<std::string> CaptureCurrentObjective() const;
+
+    LocationCapture location_capture_;
+    GameTimeCapture game_time_capture_;
     std::optional<SnapshotData> snapshot_override_;
 };
 

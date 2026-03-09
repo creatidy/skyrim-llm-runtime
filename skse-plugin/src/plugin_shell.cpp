@@ -15,6 +15,11 @@ bool SkyrimPluginShell::Initialize() {
     return InitializePluginHost(host_, ui_api_);
 }
 
+bool SkyrimPluginShell::RegisterRecapHotkey() {
+    hotkey_binding_.SetHandler([this]() { OnRecapHotkeyPressed(); });
+    return skyrim_llm::skse_host::RegisterRecapHotkey(hotkey_binding_, ui_api_);
+}
+
 void SkyrimPluginShell::SeedInitialState() {
     SeedInitialEventLog(host_, game_api_);
 }

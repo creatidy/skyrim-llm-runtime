@@ -6,8 +6,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(skyrim_llm_skse_host_scaffold STATIC
+    src/game_time_capture.cpp
     src/host_context.cpp
     src/hotkey.cpp
+    src/hotkey_binding.cpp
+    src/location_capture.cpp
+    src/notification_ui.cpp
     src/plugin_main.cpp
     src/plugin_shell.cpp
     src/snapshot.cpp

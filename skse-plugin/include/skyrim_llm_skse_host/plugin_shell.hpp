@@ -1,6 +1,7 @@
 #pragma once
 
 #include "skyrim_llm_skse_host/host_context.hpp"
+#include "skyrim_llm_skse_host/hotkey_binding.hpp"
 #include "skyrim_llm_skse_host/skyrim_game_api.hpp"
 #include "skyrim_llm_skse_host/skyrim_ui_api.hpp"
 
@@ -11,6 +12,7 @@ public:
     explicit SkyrimPluginShell(HostConfig config = {});
 
     bool Initialize();
+    bool RegisterRecapHotkey();
     void SeedInitialState();
     void OnRecapHotkeyPressed();
 
@@ -23,6 +25,7 @@ private:
     SkyrimGameApi game_api_;
     SkyrimUiApi ui_api_;
     HostContext host_;
+    RecapHotkeyBinding hotkey_binding_;
 };
 
 }  // namespace skyrim_llm::skse_host
