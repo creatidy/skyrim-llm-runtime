@@ -49,17 +49,15 @@ The repo now also contains an in-repo host scaffold:
 
 ## What is still missing
 
-The repo still does **not** contain the final Skyrim-loadable shell.
+The repo now contains a real Skyrim-loadable DLL path and a working first roundtrip, but Phase 2 is not fully hardened yet.
 
-Missing work:
+Remaining work:
 
-- real hotkey registration
-- real Skyrim snapshot capture
-- real in-game UI binding
-- final SKSE/CommonLibSSE-NG load/init confirmation in the real Windows build
-- final Windows plugin build/deployment flow using the `skse-plugin/` scaffold as the host layer
-
-That is the work required to finish Phase 2.
+- improve snapshot richness beyond the current minimal location/time capture
+- harden in-game UI behavior and message presentation
+- replace the synchronous recap wait on the game thread with a non-blocking flow
+- document and validate offline/provider-failure behavior in the real environment
+- keep build/deploy/bridge steps repeatable
 
 ## Intended architecture
 
@@ -152,7 +150,28 @@ The plugin should deploy into:
 E:\Modding\VistulaRim\MO2\mods\SkyrimLLMRuntime\SKSE\Plugins\
 ```
 
-The bridge folders are:
+The plugin DLL should still deploy into `SKSE/Plugins/`, but the working bridge folders are better kept outside MO2 virtualization in a shared absolute directory.
+
+Confirmed working example:
+
+```text
+E:\Modding\VistulaRim\bridge\SkyrimLLMRuntime\requests
+E:\Modding\VistulaRim\bridge\SkyrimLLMRuntime\responses
+```
+
+Avoid using the mod folder itself or MO2 `overwrite` as the long-term response bridge target.
+
+The plugin now supports an absolute bridge override through:
+
+```text
+SKYRIM_LLM_BRIDGE_BASE_DIR
+```
+
+set at CMake configure time for the Windows plugin build.
+
+The runtime must point at the same physical bridge folders.
+
+The old in-mod bridge folders are still:
 
 ```text
 E:\Modding\VistulaRim\MO2\mods\SkyrimLLMRuntime\SKSE\Plugins\SkyrimLLMRuntime\requests
@@ -296,12 +315,14 @@ Current CMake support in repo:
   - output name `SkyrimLLMRuntime.dll`
 - optional deployment can be configured with:
   - `SKYRIM_LLM_DEPLOY_DIR`
+- optional absolute bridge directory can be configured with:
+  - `SKYRIM_LLM_BRIDGE_BASE_DIR`
 
 ## First-pass deployment checklist
 
-1. Runtime is already running and watching the MO2 bridge folders.
+1. Runtime is already running and watching the same physical bridge folders as the plugin.
 2. Plugin DLL is present in `SKSE/Plugins/`.
-3. `SkyrimLLMRuntime/requests/` and `responses/` folders exist.
+3. Shared `requests/` and `responses/` folders exist.
 4. Skyrim loads with the plugin enabled.
 5. Hotkey press creates a request file.
 6. Runtime writes a response file.
@@ -314,7 +335,7 @@ Phase 2 is done when all of these are true:
 - plugin loads in the target Skyrim environment
 - hotkey is registered and fires
 - snapshot capture returns real game data
-- request file is written to the real bridge folder
+- request file is written to the shared bridge folder
 - response file is received
 - recap or error text is shown in game
 

@@ -33,6 +33,8 @@
 - Write request JSON: `Data/SKSE/Plugins/SkyrimLLMRuntime/requests/<request_id>.json`
 - Read response JSON: `Data/SKSE/Plugins/SkyrimLLMRuntime/responses/<request_id>.json`
 
+For the real MO2-based integration pass, the more reliable setup is a shared absolute bridge directory outside MO2 virtualization, configured consistently for both the runtime and the Windows plugin build.
+
 Contract fields stay versioned in:
 
 - `runtime/contracts/recap-request-v1.schema.json`

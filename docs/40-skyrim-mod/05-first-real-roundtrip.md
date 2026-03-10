@@ -16,8 +16,9 @@ This closes the first half of the remaining P1 work. The second half is the fina
 
 ## Current status
 
-- Phase 1 is done in the current working setup.
-- Current focus is Phase 2.
+- Phase 1 is done.
+- Phase 2 core loop is now working in the target environment.
+- Current focus has moved to Phase 3 validation and Phase 4 stabilization.
 
 ## Phase 1 - Runtime and bridge preparation
 
@@ -34,7 +35,7 @@ This phase is complete. Do not spend time here unless paths change.
 
 ## Phase 2 - Real Skyrim-side wiring
 
-Status: **Current**
+Status: **Core loop working**
 
 Goal:
 
@@ -54,7 +55,15 @@ Exit criteria for Phase 2:
 - Request file appears in the real bridge folder.
 - Response file is picked up and shown in game.
 
+Current note:
+
+- The working bridge setup uses a shared absolute folder outside MO2 virtualization.
+- Using the MO2 mod folder or `overwrite` directly as the long-term bridge target caused mismatches.
+- Current known rough edge: the hotkey path is still synchronous and can stall the game thread until the response timeout expires.
+
 ## Phase 3 - Real environment validation pass
+
+Status: **Current**
 
 Goal:
 
@@ -69,6 +78,7 @@ Tasks:
 4. Save redacted request/response artifacts.
 5. Save replay bundle artifacts.
 6. Record exact build/config/model identifiers.
+7. Record the exact shared bridge directory and deployment path used in the successful run.
 
 Exit criteria:
 
@@ -78,14 +88,16 @@ Exit criteria:
 
 ## Phase 4 - Stabilization
 
+Status: **Next**
+
 Goal:
 
 - Convert findings from the first real pass into backlog tasks and cleanup work.
 
 Tasks:
 
-1. Fix path assumptions, timing issues, or UI rough edges.
-2. Tighten hotkey handling if needed.
+1. Fix path assumptions and keep both runtime/plugin on the same absolute bridge directory.
+2. Replace the synchronous recap wait with a non-blocking flow.
 3. Improve deployment ergonomics.
 4. Update docs with confirmed working steps.
 
@@ -101,7 +113,7 @@ Use this when you return to the real environment:
 2. Launch Skyrim through SKSE in the target modpack.
 3. Load a save.
 4. Press the recap hotkey.
-5. Check `requests/` and `responses/`.
+5. Check `requests/` and `responses/` in the shared absolute bridge directory.
 6. Confirm recap UI appears.
 7. Repeat with runtime stopped.
 8. Repeat with provider failure path.

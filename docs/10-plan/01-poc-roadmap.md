@@ -25,7 +25,7 @@ Exit criteria:
 
 ## Milestone P1 - End-to-end Recap (file bridge)
 
-Status: **In progress (repo implementation complete, real Skyrim pass pending)**
+Status: **In progress (first real Skyrim roundtrip working, validation/stabilization pending)**
 
 Delivered in repo:
 - File-bridge transport implementation (`crates/transport-file`).
@@ -44,15 +44,16 @@ Delivered in repo:
 - Env-only runtime secret posture (`OPENAI_API_KEY`).
 
 Remaining for full P1 closure:
-- First real Skyrim roundtrip in the target game environment.
+- Validate the now-working real Skyrim roundtrip against the full smoke checklist.
   - Roundtrip tutorial and phased status live in `docs/40-skyrim-mod/05-first-real-roundtrip.md`.
-  - Phase 1 (runtime path + real bridge folder preparation) is done in the current working setup.
-  - Current focus is Phase 2: wiring the real Skyrim-side shell to the prepared integration layer under `mod/`.
-- Final SKSE wiring from the prepared thin integration layer into actual in-game hotkey/UI hooks.
-  - Implementation target and build/deploy guidance live in `docs/40-skyrim-mod/06-phase-2-skse-wiring.md`.
+  - The current working setup now reaches: plugin load -> hotkey -> request file -> runtime response -> in-game processing.
+  - Remaining validation work is mainly offline/provider-failure coverage and artifact capture.
+- Stabilize the real SKSE path now that the core loop is working.
+  - Current known rough edge: recap triggering is still synchronous and can stall the game thread while waiting for the response timeout.
+  - Build/deploy/bridge guidance lives in `docs/40-skyrim-mod/06-phase-2-skse-wiring.md`.
 
 Exit criteria:
-- Hotkey -> recap displayed in game. **Pending final in-game validation pass**.
+- Hotkey -> recap displayed in game. **Core path now working; final validation/hardening still pending**.
 - No API key stored anywhere in the mod. **Met in repo implementation**.
 - Replay bundle generated and replayable without launching Skyrim. **Met in runtime flow**.
 

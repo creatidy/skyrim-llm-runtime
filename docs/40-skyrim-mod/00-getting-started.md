@@ -20,11 +20,13 @@
   - runtime is serving the real bridge path
   - bridge folders are known
   - runtime-side validation is complete
-- Current focus is Phase 2:
-  - connect a real Skyrim/SKSE shell to the prepared integration layer in `mod/`
-  - capture a real snapshot from the running game
-  - register a hotkey
-  - render recap/error text in game
+- Phase 2 core loop is now working:
+  - real Skyrim/SKSE shell loads
+  - hotkey path reaches the runtime
+  - request/response processing works in the target environment
+- Current focus is now:
+  - Phase 3 validation
+  - Phase 4 stabilization of the real path
 
 ## Read this next
 
@@ -51,6 +53,12 @@ Then build from:
 
 ```text
 E:\Modding\VistulaRim\skyrim-llm-runtime-build\skse-plugin
+```
+
+Current recommended runtime/plugin bridge:
+
+```text
+E:\Modding\VistulaRim\bridge\SkyrimLLMRuntime
 ```
 
 ## Non-negotiables

@@ -77,7 +77,7 @@ That logic stays in `mod/`.
 
 ## Current state
 
-This folder is an in-repo scaffold, not yet a final Skyrim-loadable DLL.
+This folder is now the real in-repo Windows/SKSE host path used for the first successful Skyrim roundtrip.
 
 What is ready:
 
@@ -88,14 +88,16 @@ What is ready:
 - single hotkey dispatch path through `FeedKeyEvent(...)`
 - UI scaffold with separate HUD-notification and message-box paths
 - buildable portable scaffold target
+- real Windows/CommonLibSSE build path for `SkyrimLLMRuntime.dll`
+- real SKSE load path using deferred initialization on `kDataLoaded`
+- first successful request/response processing path in the target environment
 
 What is still missing:
 
-- real hotkey registration
-- real Skyrim data extraction
-- real in-game notifications/message UI
-- final SKSE/CommonLibSSE-NG load-path confirmation in the real Windows build
-- Windows DLL build + deployment into the MO2 mod folder
+- richer Skyrim data extraction
+- hardened in-game notifications/message UI
+- non-blocking recap flow
+- cleanup of deployment/bridge ergonomics and negative-path validation
 
 ## Concrete Phase 2 TODO files
 
@@ -135,6 +137,8 @@ Important options:
   - enable/disable the real Windows plugin target
 - `SKYRIM_LLM_DEPLOY_DIR`
   - optional deployment folder for the built DLL/PDB
+- `SKYRIM_LLM_BRIDGE_BASE_DIR`
+  - optional absolute bridge directory used by the plugin at runtime
 
 The Windows build metadata lives next to this CMake target:
 
@@ -172,5 +176,20 @@ Then run the Windows build from:
 ```text
 E:\Modding\VistulaRim\skyrim-llm-runtime-build\skse-plugin
 ```
+
+Current recommended runtime bridge setup:
+
+```text
+E:\Modding\VistulaRim\bridge\SkyrimLLMRuntime
+```
+
+with:
+
+```text
+E:\Modding\VistulaRim\bridge\SkyrimLLMRuntime\requests
+E:\Modding\VistulaRim\bridge\SkyrimLLMRuntime\responses
+```
+
+Using MO2 `overwrite` or the mod folder itself as the long-term bridge path caused mismatches during the real integration pass.
 
 The real DLL still has to be built in a Windows environment with SKSE/CommonLibSSE-NG dependencies.

@@ -8,9 +8,9 @@ Status markers:
 ## Functional
 
 - `[~]` Press hotkey -> recap appears in game, or clear error message.
-  - Runtime and in-repo mod-side bridge loop are implemented.
-  - Runtime/bridge preparation for the real environment is complete.
-  - Current work is Phase 2: real Skyrim-side hotkey/UI/snapshot wiring.
+  - The real Skyrim path now reaches: plugin load -> hotkey -> request file -> runtime response -> in-game processing.
+  - The shared absolute bridge directory is the confirmed working setup.
+  - Remaining work is final smoke validation and UX hardening.
   - See:
     - `docs/40-skyrim-mod/05-first-real-roundtrip.md`
     - `docs/40-skyrim-mod/06-phase-2-skse-wiring.md`
@@ -21,7 +21,9 @@ Status markers:
 
 - `[x]` Provider keys never exist in Skyrim scripts or mod files.
 - `[~]` Runtime runs on localhost/default local file bridge.
-  - File bridge is implemented end to end in repo; real Skyrim environment validation is pending.
+  - File bridge is implemented end to end in repo.
+  - Real Skyrim roundtrip is now working when both sides target the same absolute bridge directory.
+  - Remaining work is cleanup of deployment/path ergonomics and negative-path validation.
 - `[x]` Request payload is minimal and redacted.
 - `[x]` Replay bundles are redacted by default posture.
 
@@ -29,8 +31,7 @@ Status markers:
 
 - `[~]` If runtime is offline -> understandable message contract is defined.
   - Runtime-side simulator timeout test and native client error mapping are implemented.
-  - Real Skyrim message rendering still needs a final smoke pass.
-  - Phase 2 wiring is the current dependency.
+  - Real Skyrim message rendering exists, but the negative-path smoke pass still needs to be recorded explicitly.
 - `[x]` If provider fails -> fallback behavior works (cached or safe template).
 - `[x]` Validation failures fail closed.
 
@@ -51,7 +52,9 @@ Status markers:
 
 ## External validation gate (Iteration 3)
 
-- `[ ]` First real Skyrim roundtrip succeeds with clear degradation behavior.
+- `[~]` First real Skyrim roundtrip succeeds with clear degradation behavior.
+  - First successful real roundtrip is now working.
   - Bring-up plan: `docs/40-skyrim-mod/05-first-real-roundtrip.md`
+  - Remaining work is degradation-path validation and documentation of findings.
 - `[x]` Simulator suite remains green after integration adjustments.
 - `[ ]` Integration findings documented and converted into backlog items.
