@@ -91,13 +91,44 @@ Important distinction:
 Practical requirement:
 
 - build the Skyrim plugin from Windows, not from the Linux dev container
+- if the repo lives in a container-only workspace, first export a host-visible build tree with:
+
+```bash
+bash .devcontainer/export-windows-build.sh
+```
+
+This stages the Windows build inputs in:
+
+```text
+E:\Modding\VistulaRim\skyrim-llm-runtime-build
+```
+
+and the Windows CMake/vcpkg entrypoint becomes:
+
+```text
+E:\Modding\VistulaRim\skyrim-llm-runtime-build\skse-plugin
+```
+
+In that exported `skse-plugin/` folder:
+
+- `CMakePresets.json`
+- `vcpkg.json`
+- `vcpkg-configuration.json`
+
+are shared tracked project files.
+
+Machine-specific Windows settings should go only into:
+
+- `CMakeUserPresets.json`
+
+which is local-only and ignored by git.
 
 Typical prerequisites for that Windows-side build:
 
 - Visual Studio C++ build tools installed on Windows
 - CMake
 - `vcpkg`
-- SKSE/CommonLibSSE-NG headers and libraries available to the in-repo `skse-plugin/` target
+- SKSE/CommonLibSSE-NG headers and libraries available to the exported `skse-plugin/` target
 - VS Code C++ and CMake extensions
 
 Recommended reference shell projects:

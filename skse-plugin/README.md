@@ -57,9 +57,9 @@ That logic stays in `mod/`.
 - `src/hotkey_binding.cpp`
   - CommonLib-style `RE::InputEvent` sink scaffold with clean unregister logic and a public `FeedKeyEvent(scan_code, pressed)` entrypoint
 - `src/location_capture.cpp`
-  - TODO location capture placeholder
+  - `RE::`-guarded location capture scaffold
 - `src/game_time_capture.cpp`
-  - TODO game-time capture placeholder
+  - `RE::`-guarded in-game time capture scaffold
 - `src/snapshot.cpp`
   - optional initial event-log seeding helper
 - `src/notification_ui.cpp`
@@ -135,5 +135,42 @@ Important options:
   - enable/disable the real Windows plugin target
 - `SKYRIM_LLM_DEPLOY_DIR`
   - optional deployment folder for the built DLL/PDB
+
+The Windows build metadata lives next to this CMake target:
+
+- `skse-plugin/CMakePresets.json`
+- `skse-plugin/vcpkg.json`
+- `skse-plugin/vcpkg-configuration.json`
+
+These three files are shared project files and should stay versioned in the repo.
+
+Local machine-specific settings do not belong in those files. Use:
+
+- `skse-plugin/CMakeUserPresets.json`
+
+for local-only paths such as:
+
+- `VCPKG_ROOT`
+- `SKYRIM_LLM_DEPLOY_DIR`
+
+`skse-plugin/CMakeUserPresets.json` is ignored by git.
+
+If the repo is opened in a container-only workspace, export a host-visible Windows build tree first:
+
+```bash
+bash .devcontainer/export-windows-build.sh
+```
+
+That writes a Windows-buildable copy to:
+
+```text
+E:\Modding\VistulaRim\skyrim-llm-runtime-build
+```
+
+Then run the Windows build from:
+
+```text
+E:\Modding\VistulaRim\skyrim-llm-runtime-build\skse-plugin
+```
 
 The real DLL still has to be built in a Windows environment with SKSE/CommonLibSSE-NG dependencies.

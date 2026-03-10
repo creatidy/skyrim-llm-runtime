@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(skyrim_llm_skse_host LANGUAGES CXX)
+project(skyrim_llm_skse_host VERSION 0.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -7,6 +7,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 option(SKYRIM_LLM_BUILD_WINDOWS_PLUGIN "Build the Windows Skyrim plugin target when dependencies are available" ON)
 set(SKYRIM_LLM_DEPLOY_DIR "" CACHE PATH "Optional deployment directory for the built Skyrim plugin DLL/PDB")
+set(SKYRIM_LLM_BRIDGE_BASE_DIR "" CACHE PATH "Optional absolute bridge directory for the Windows plugin at runtime")
 
 set(SKYRIM_LLM_MOD_SOURCES
     ../mod/src/bridge_client.cpp
@@ -51,6 +52,12 @@ target_link_libraries(skyrim_llm_skse_host_scaffold
     PUBLIC
         skyrim_llm_mod_runtime_support
 )
+if(SKYRIM_LLM_BRIDGE_BASE_DIR)
+    target_compile_definitions(skyrim_llm_skse_host_scaffold
+        PUBLIC
+            SKYRIM_LLM_BRIDGE_BASE_DIR="${SKYRIM_LLM_BRIDGE_BASE_DIR}"
+    )
+endif()
 
 if(MSVC)
     target_compile_options(skyrim_llm_mod_runtime_support PRIVATE /W4 /permissive- /EHsc /utf-8)
@@ -64,18 +71,29 @@ if(WIN32 AND SKYRIM_LLM_BUILD_WINDOWS_PLUGIN)
     find_package(CommonLibSSE CONFIG QUIET)
 
     if(CommonLibSSE_FOUND)
-        add_library(skyrim_llm_skse_plugin SHARED
-            ${SKYRIM_LLM_HOST_SOURCES}
+        add_commonlibsse_plugin(skyrim_llm_skse_plugin
+            NAME "SkyrimLLMRuntime"
+            AUTHOR "skyrim-llm-runtime"
+            MINIMUM_SKSE_VERSION "2.2.6"
+            USE_ADDRESS_LIBRARY
+            SOURCES
+                ${SKYRIM_LLM_HOST_SOURCES}
         )
         target_include_directories(skyrim_llm_skse_plugin
             PRIVATE
                 include
                 ../mod/include
         )
+        if(SKYRIM_LLM_BRIDGE_BASE_DIR)
+            target_compile_definitions(skyrim_llm_skse_plugin
+                PRIVATE
+                    SKYRIM_LLM_BRIDGE_BASE_DIR="${SKYRIM_LLM_BRIDGE_BASE_DIR}"
+            )
+        endif()
+        target_precompile_headers(skyrim_llm_skse_plugin PRIVATE include/skyrim_llm_skse_host/commonlibsse_plugin_pch.hpp)
         target_link_libraries(skyrim_llm_skse_plugin
             PRIVATE
                 skyrim_llm_mod_runtime_support
-                CommonLibSSE::CommonLibSSE
         )
         set_target_properties(skyrim_llm_skse_plugin PROPERTIES
             OUTPUT_NAME "SkyrimLLMRuntime"

@@ -22,7 +22,9 @@
             "args": [
                 "serve",
                 "--transport",
-                "file"
+                "file",
+                "--config",
+                "${workspaceFolder}/runtime/config.dev.json"
             ],
             "cwd": "${workspaceFolder}/runtime",
             "env": {
@@ -52,6 +54,8 @@
             },
             "args": [
                 "simulate",
+                "--config",
+                "${workspaceFolder}/runtime/config.dev.json",
                 "--spoiler-mode",
                 "safe"
             ],

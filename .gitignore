@@ -13,6 +13,7 @@ Cargo.lock
 node_modules
 dist
 build
+**/CMakeUserPresets.json
 
 # Runtime artifacts
 replay-bundles/
@@ -21,6 +22,7 @@ cache/
 secrets/
 .env
 .env.*
+vcpkg_installed/
 
 # Skyrim / tooling noise
 Data/

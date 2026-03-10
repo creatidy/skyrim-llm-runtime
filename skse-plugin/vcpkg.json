@@ -1,0 +1,9 @@
+{
+  "name": "skyrim-llm-skse-plugin",
+  "version-string": "0.1.0",
+  "description": "Windows SKSE/CommonLibSSE dependencies for the Skyrim LLM skse-plugin target",
+  "supports": "windows",
+  "dependencies": [
+    "commonlibsse-ng"
+  ]
+}

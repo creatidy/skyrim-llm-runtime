@@ -1,9 +1,6 @@
 #include "skyrim_llm_skse_host/notification_ui.hpp"
 
-#if __has_include(<RE/M/Misc.h>)
-#include <RE/M/Misc.h>
-#define SKYRIM_LLM_HAS_RE_UI 1
-#elif __has_include(<RE/Skyrim.h>)
+#if __has_include(<RE/Skyrim.h>)
 #include <RE/Skyrim.h>
 #define SKYRIM_LLM_HAS_RE_UI 1
 #else

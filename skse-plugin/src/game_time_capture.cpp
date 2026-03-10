@@ -20,13 +20,13 @@ std::optional<std::string> GameTimeCapture::CaptureGameTime() const {
     }
 
     const auto year = calendar->GetYear();
-    const auto hour_float = calendar->GetHour();
-    const auto minutes = calendar->GetMinutes();
-    const auto hour = static_cast<unsigned int>(hour_float) % 24;
+    const auto time = calendar->GetTime();
+    const auto hour = static_cast<unsigned int>(time.tm_hour) % 24;
+    const auto minutes = static_cast<unsigned int>(time.tm_min) % 60;
 
     std::ostringstream out;
     out << "4E " << year << ", " << std::setfill('0') << std::setw(2) << hour << ':'
-        << std::setw(2) << (minutes % 60);
+        << std::setw(2) << minutes;
     return out.str();
 #endif
 

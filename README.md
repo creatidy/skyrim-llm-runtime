@@ -77,3 +77,16 @@ Start at:
 This repo includes a root `.devcontainer` for consistent Rust setup and testing.
 
 - Setup and usage: `docs/30-runtime/05-devcontainer.md`
+- If the repo is opened in a container-only workspace and you need the Windows SKSE/CommonLibSSE build, first export a host-visible copy with:
+
+```bash
+bash .devcontainer/export-windows-build.sh
+```
+
+Then build from:
+
+```text
+E:\Modding\VistulaRim\skyrim-llm-runtime-build\skse-plugin
+```
+
+The shared Windows build metadata lives under `skse-plugin/`. Local-only machine paths belong in `skse-plugin/CMakeUserPresets.json`, which is ignored by git.

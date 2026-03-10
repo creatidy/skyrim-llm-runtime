@@ -31,6 +31,28 @@
 - `docs/40-skyrim-mod/05-first-real-roundtrip.md`
 - `docs/40-skyrim-mod/06-phase-2-skse-wiring.md`
 
+## If you are using the devcontainer
+
+If the repo is opened in a container-only workspace, the Windows host will not see the container filesystem directly.
+
+Before doing the real Windows SKSE/CommonLibSSE build, export a host-visible build tree:
+
+```bash
+bash .devcontainer/export-windows-build.sh
+```
+
+That stages the Windows build inputs in:
+
+```text
+E:\Modding\VistulaRim\skyrim-llm-runtime-build
+```
+
+Then build from:
+
+```text
+E:\Modding\VistulaRim\skyrim-llm-runtime-build\skse-plugin
+```
+
 ## Non-negotiables
 
 - No provider keys in the mod.

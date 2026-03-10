@@ -1,0 +1,57 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 24,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "windows-base",
+      "hidden": true,
+      "generator": "Visual Studio 17 2022",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "binaryDir": "${sourceDir}/build/windows-msvc",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+        "SKYRIM_LLM_BUILD_WINDOWS_PLUGIN": "ON"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "windows-skse",
+      "inherits": "windows-base",
+      "description": "Configure the in-repo skse-plugin Windows/CommonLibSSE build"
+    },
+    {
+      "name": "windows-skse-deploy",
+      "inherits": "windows-base",
+      "description": "Configure the Windows/CommonLibSSE build and deploy SkyrimLLMRuntime.dll when SKYRIM_LLM_DEPLOY_DIR is provided locally"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "build-windows-skse",
+      "configurePreset": "windows-skse",
+      "configuration": "RelWithDebInfo",
+      "targets": [
+        "skyrim_llm_skse_plugin"
+      ]
+    },
+    {
+      "name": "build-windows-skse-deploy",
+      "configurePreset": "windows-skse-deploy",
+      "configuration": "RelWithDebInfo",
+      "targets": [
+        "skyrim_llm_skse_plugin"
+      ]
+    }
+  ]
+}
